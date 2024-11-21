@@ -1,0 +1,19 @@
+.container {
+ padding: 20px;
+ text-align: center;
+}
+
+.heading {
+ font-size: 24px;
+ margin-bottom: 20px;
+}
+
+.mapPlaceholder {
+ height: 300px;
+ border: 2px dashed #ccc;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ color: #666;
+ background-color: #f9f9f9;
+}
