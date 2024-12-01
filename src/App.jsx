@@ -2,6 +2,7 @@ import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import About from "./pages/About";
+import Login from "./pages/Login";
 import AgentVerification from "./pages/AgentVerification";
 import AgentsList from "./pages/AgentsList";
 import TasksList from "./pages/TasksList";
@@ -15,7 +16,11 @@ import TaskForm from "./components/TaskForm";
 import AgentVerificationForm from "./components/AgentVerificationForm";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
-import ErrorBoundary from "./components/ErrorBoundary"; // Import ErrorBoundary
+import ErrorBoundary from "./components/ErrorBoundary"; 
+import Register from "./pages/Register";
+import Dashboard from "./pages/Dashboard";
+import Analytics from "./pages/Analytics";
+import AuthForm from "./components/AuthForm"; 
 import "./index.css"; // Ensure global styles are included
 
 const App = () => {
@@ -29,12 +34,16 @@ const App = () => {
               {/* Main Routes */}
               <Route path="/" element={<Home />} />
               <Route path="/about" element={<About />} />
+              <Route path="/login" element={<Login />} />
               <Route path="/agent-verification" element={<AgentVerification />} />
               <Route path="/agents" element={<AgentsList />} />
               <Route path="/tasks" element={<TasksList />} />
               <Route path="/users" element={<UsersList />} />
+              <Route path="/register" element={<Register />} /> 
+              <Route path="/login" element={<AuthForm />} />  
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/analytics" element={<Analytics />} />
 
-              {/* New Routes */}
               <Route path="/request-task" element={<RequestTask />} />
               <Route path="/find-agent" element={<FindAgent />} />
               <Route path="/agent-profile" element={<AgentProfile />} />

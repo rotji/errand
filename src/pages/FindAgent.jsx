@@ -1,13 +1,14 @@
 import React from 'react';
 import styles from './FindAgent.module.css';
+import Map from '../../components/Map';
+
 
 const FindAgent = () => {
   return (
     <div className={styles.container}>
       <h2 className={styles.heading}>Find an Agent</h2>
-      <div className={styles.mapPlaceholder}>
-        {/* Replace this with an actual map integration */}
-        Map of nearby agents will go here
+      <div className={styles.mapContainer}>
+        <Map />
       </div>
     </div>
   );
