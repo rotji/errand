@@ -11,6 +11,10 @@ const Header = () => {
       <nav className={styles.nav}>
         <Link to="/" className={styles.link}>Home</Link>
         <Link to="/about" className={styles.link}>About</Link>
+        <Link to="/register" className={styles.link}>Register</Link> {/* Added className */}
+        <Link to="/login" className={styles.link}>Login</Link>
+        <Link to="/dashboard" className={styles.link}>Dashboard</Link> {/* Added className */}
+        <Link to="/analytics" className={styles.link}>Analytics</Link> {/* Fixed <li> tag */}
         <Link to="/verify-agent" className={styles.link}>Verify Agent</Link>
         <Link to="/agents-list" className={styles.link}>Agents List</Link>
         <Link to="/find-agent" className={styles.link}>Find Agent</Link> {/* New link */}

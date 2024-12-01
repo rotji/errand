@@ -1,0 +1,35 @@
+.analyticsContainer {
+ padding: 20px;
+ margin: auto;
+ max-width: 800px;
+ background-color: #f9f9f9;
+ border-radius: 8px;
+ box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.title {
+ font-size: 2rem;
+ color: #333;
+ margin-bottom: 1rem;
+ text-align: center;
+}
+
+.section {
+ margin-bottom: 1.5rem;
+ padding: 15px;
+ border: 1px solid #ddd;
+ border-radius: 6px;
+ background-color: #fff;
+}
+
+.subTitle {
+ font-size: 1.5rem;
+ color: #555;
+ margin-bottom: 0.5rem;
+}
+
+p {
+ font-size: 1rem;
+ color: #666;
+ margin: 0.2rem 0;
+}

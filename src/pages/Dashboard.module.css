@@ -1,0 +1,84 @@
+.dashboard {
+ padding: 20px;
+ background-color: #f9f9f9;
+ min-height: 100vh;
+}
+
+.title {
+ text-align: center;
+ font-size: 2.5rem;
+ margin-bottom: 20px;
+ color: #007bff;
+}
+
+.quickActions {
+ display: flex;
+ gap: 10px;
+ justify-content: center;
+ margin-bottom: 30px;
+}
+
+.quickAction {
+ background-color: #007bff;
+ color: white;
+ border: none;
+ border-radius: 5px;
+ padding: 10px 15px;
+ cursor: pointer;
+ font-size: 1rem;
+ transition: background-color 0.3s ease;
+}
+
+.quickAction:hover {
+ background-color: #0056b3;
+}
+
+.sections {
+ display: flex;
+ gap: 20px;
+ justify-content: center;
+ flex-wrap: wrap;
+}
+
+.section {
+ background-color: #ffffff;
+ border: 1px solid #ddd;
+ border-radius: 8px;
+ box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+ padding: 20px;
+ text-align: center;
+ width: 300px;
+ transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.section h2 {
+ color: #007bff;
+ font-size: 1.5rem;
+ margin-bottom: 10px;
+}
+
+.section p {
+ color: #555;
+ font-size: 1rem;
+ margin-bottom: 20px;
+}
+
+.sectionButton {
+ background-color: #28a745;
+ color: white;
+ border: none;
+ border-radius: 5px;
+ padding: 10px 15px;
+ cursor: pointer;
+ font-size: 1rem;
+ transition: background-color 0.3s ease;
+}
+
+.sectionButton:hover {
+ background-color: #218838;
+}
+
+.section:hover {
+ transform: translateY(-5px);
+ box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}

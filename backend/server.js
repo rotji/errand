@@ -18,10 +18,12 @@ app.get("/", (req, res) => {
 const agentRoutes = require("./routes/agent");
 const userRoutes = require("./routes/user");
 const taskRoutes = require("./routes/task");
+const registerRoute = require("./routes/register"); 
 
 app.use("/api/agents", agentRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/tasks", taskRoutes);
+app.use("/api/register", registerRoute);
 
 // MongoDB connection string
 const mongoURI = "mongodb://127.0.0.1:27017/errand";
