@@ -10,23 +10,29 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setError('');
-
+  const handleLogin = async () => {
     try {
       // Send login request to backend
-      const response = await axios.post('http://localhost:5000/api/login', { email, password });
+      const response = await axios.post("http://localhost:5000/api/login", { email, password });
+      console.log("Login successful:", response.data);
 
-      // If successful, navigate to dashboard or home page
-      alert('Login successful');
-      navigate('/dashboard'); // Replace this with your desired redirect route
+      // If successful, navigate to the dashboard or home page
+      alert("Login successful");
+      navigate('/About'); // Adjust this route to your project requirements
     } catch (err) {
-      setError('Invalid credentials or server error');
+      console.error("Login error:", err.response?.data?.error || "Server error");
+      setError(err.response?.data?.error || "Invalid credentials or server error");
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError('');
+    setLoading(true);
+
+    await handleLogin(); // Use the dedicated handleLogin function
   };
 
   return (
@@ -35,8 +41,9 @@ const Login = () => {
       {error && <div className={styles.error}>{error}</div>}
       <form onSubmit={handleSubmit} className={styles.form}>
         <div className={styles.formGroup}>
-          <label className={styles.label}>Email:</label>
+          <label htmlFor="email" className={styles.label}>Email:</label>
           <input
+            id="email"
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
@@ -45,8 +52,9 @@ const Login = () => {
           />
         </div>
         <div className={styles.formGroup}>
-          <label className={styles.label}>Password:</label>
+          <label htmlFor="password" className={styles.label}>Password:</label>
           <input
+            id="password"
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
@@ -55,7 +63,7 @@ const Login = () => {
           />
         </div>
         <button type="submit" className={styles.button} disabled={loading}>
-          {loading ? 'Logging in...' : 'Login'}
+          {loading ? "Logging in..." : "Login"}
         </button>
       </form>
     </div>

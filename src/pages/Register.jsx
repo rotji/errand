@@ -3,25 +3,33 @@ import styles from "./Register.module.css";
 import axios from "axios";
 
 const Register = () => {
-  const [formData, setFormData] = useState({ name: "", email: "", password: "" });
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+    role: "user", // Default role
+  });
+
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    setMessage(""); // Clear previous success message
+    setError(""); // Clear previous error
+
     try {
       const response = await axios.post("http://localhost:5000/api/register", formData);
-      setMessage(response.data.message);
-      setError(""); // Clear any previous errors
-      setFormData({ name: "", email: "", password: "" }); // Reset form
+      setMessage(response.data.message); // Display success message
+      setFormData({ name: "", email: "", password: "", role: "user" }); // Reset form
     } catch (err) {
-      setError(err.response?.data?.error || "Something went wrong");
-      setMessage(""); // Clear any previous messages
+      setError(err.response?.data?.error || "Something went wrong"); // Display error
     }
   };
 
@@ -68,8 +76,26 @@ const Register = () => {
           />
         </div>
 
-        <button type="submit" className={styles.registerButton}>
-          Register
+        <div className={styles.inputGroup}>
+          <label htmlFor="role">Register as:</label>
+          <select
+            name="role"
+            id="role"
+            value={formData.role}
+            onChange={handleChange}
+            required
+          >
+            <option value="user">User</option>
+            <option value="agent">Agent</option>
+          </select>
+        </div>
+
+        <button
+          type="submit"
+          className={styles.registerButton}
+          disabled={!formData.name || !formData.email || !formData.password}
+        >
+          {message ? "Registered" : "Register"}
         </button>
       </form>
     </div>
