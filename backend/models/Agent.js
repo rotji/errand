@@ -1,31 +1,11 @@
 const mongoose = require("mongoose");
 
 const agentSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: true,
-    trim: true,
-  },
-  phone: {
-    type: String,
-    required: true,
-    unique: true,
-    trim: true,
-  },
-  location: {
-    type: { type: String, default: "Point" }, // This ensures the location is a Point
-    coordinates: {
-      type: [Number], // [longitude, latitude]
-      required: true,
-    },
-  },
-  createdAt: {
-    type: Date,
-    default: Date.now,
-  },
+    name: { type: String, required: true },
+    email: { type: String, required: true, unique: true },
+    password: { type: String, required: true },
 });
 
-// Create a geospatial index on the location field
-agentSchema.index({ location: "2dsphere" });
+const Agent = mongoose.model("Agent", agentSchema );
 
-module.exports = mongoose.model("Agent", agentSchema);
+module.exports = Agent;

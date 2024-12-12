@@ -1,6 +1,7 @@
 import React from 'react';
 import styles from './FindAgent.module.css';
-import Map from '../../components/Map';
+import Map from "../components/Map";
+
 
 
 const FindAgent = () => {
