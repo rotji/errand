@@ -1,13 +1,11 @@
 const express = require("express");
 const router = express.Router();
-const taskController = require("../controllers/taskController"); // Import the taskController
+const taskController = require("../controllers/taskController");
 
-// Define routes and map them to controller functions
-router.post("/create", taskController.createTask);
+// Route to create a new task
+router.post("/", taskController.createTask);
+
+// Route to fetch all tasks (optional, for admin or debugging purposes)
 router.get("/", taskController.getAllTasks);
-router.get("/agent/:agentId", taskController.getTasksByAgent);
-router.get("/user/:userId", taskController.getTasksByUser);
-router.get("/status/:status", taskController.getTasksByStatus);
-router.get("/near", taskController.findTasksNearLocation);
 
 module.exports = router;

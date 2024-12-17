@@ -1,97 +1,36 @@
-const Task = require("../models/Task"); // Import the Task model
+const Task = require("../models/Task"); 
 
-// Create a new task
+// Controller to create a task
 exports.createTask = async (req, res) => {
-  const { description, userId, agentId, status, location } = req.body;
-
-  if (!description || !userId || !agentId || !status || !location) {
-    return res.status(400).json({ error: "Description, userId, agentId, status, and location are required" });
-  }
-
   try {
-    const newTask = new Task({ description, userId, agentId, status, location });
+    const { title, description, from, to, phone } = req.body;
+
+    // Validate input fields
+    if (!title || !description || !from || !to || !phone) {
+      return res.status(400).json({ error: "All fields are required" });
+    }
+
+    // Create and save the new task
+    const newTask = new Task({ title, description, from, to, phone });
     await newTask.save();
-    res.status(201).json({ message: "Task created successfully", task: newTask });
-  } catch (err) {
-    console.error("Error creating task:", err);
-    res.status(500).json({ error: "Failed to create task" });
+
+    res.status(201).json({
+      message: "Task created successfully",
+      task: newTask,
+    });
+  } catch (error) {
+    console.error("Error creating task:", error);
+    res.status(500).json({ error: "An error occurred while creating the task" });
   }
 };
 
-// Retrieve all tasks
+// Controller to fetch all tasks (optional for admin view or debugging)
 exports.getAllTasks = async (req, res) => {
   try {
     const tasks = await Task.find();
-    res.status(200).json(tasks);
-  } catch (err) {
-    console.error("Error retrieving tasks:", err);
-    res.status(500).json({ error: "Failed to retrieve tasks" });
-  }
-};
-
-// Get tasks by agentId
-exports.getTasksByAgent = async (req, res) => {
-  const { agentId } = req.params;
-
-  try {
-    const tasks = await Task.find({ agentId });
-    res.status(200).json(tasks);
-  } catch (err) {
-    console.error("Error retrieving tasks by agent:", err);
-    res.status(500).json({ error: "Failed to retrieve tasks" });
-  }
-};
-
-// Get tasks by userId
-exports.getTasksByUser = async (req, res) => {
-  const { userId } = req.params;
-
-  try {
-    const tasks = await Task.find({ userId });
-    res.status(200).json(tasks);
-  } catch (err) {
-    console.error("Error retrieving tasks by user:", err);
-    res.status(500).json({ error: "Failed to retrieve tasks" });
-  }
-};
-
-// Get tasks by status
-exports.getTasksByStatus = async (req, res) => {
-  const { status } = req.params;
-
-  try {
-    const tasks = await Task.find({ status });
-    res.status(200).json(tasks);
-  } catch (err) {
-    console.error("Error retrieving tasks by status:", err);
-    res.status(500).json({ error: "Failed to retrieve tasks" });
-  }
-};
-
-// Find tasks near a given location
-exports.findTasksNearLocation = async (req, res) => {
-  const { latitude, longitude, maxDistance = 5000 } = req.query;
-
-  if (!latitude || !longitude) {
-    return res.status(400).json({ error: "Latitude and longitude are required" });
-  }
-
-  try {
-    const tasks = await Task.find({
-      location: {
-        $near: {
-          $geometry: {
-            type: "Point",
-            coordinates: [longitude, latitude],
-          },
-          $maxDistance: maxDistance,
-        },
-      },
-    });
-
-    res.status(200).json(tasks);
-  } catch (err) {
-    console.error("Error retrieving tasks near location:", err);
-    res.status(500).json({ error: "Failed to retrieve tasks" });
+    return res.status(200).json({ tasks });
+  } catch (error) {
+    console.error("Error fetching tasks:", error);
+    return res.status(500).json({ error: "An error occurred while fetching tasks" });
   }
 };

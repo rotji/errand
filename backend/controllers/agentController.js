@@ -76,3 +76,35 @@ exports.registerAgent = async (req, res) => {
         });
     }
 };
+
+// Find Nearby Agents
+exports.findNearbyAgents = async (req, res) => {
+    const { lat, lng } = req.query;
+
+    // Ensure latitude and longitude are provided
+    if (!lat || !lng) {
+        return res.status(400).json({ error: "Latitude and longitude are required." });
+    }
+
+    try {
+        const agents = await Agent.find();
+
+        const agentsWithDistance = agents
+            .filter(agent => agent.location && agent.location.lat && agent.location.lng) // Ensure agents have valid locations
+            .map((agent) => {
+                const distance = Math.sqrt(
+                    Math.pow(agent.location.lat - parseFloat(lat), 2) +
+                    Math.pow(agent.location.lng - parseFloat(lng), 2)
+                );
+                return { ...agent.toObject(), distance };
+            });
+
+        // Sort agents by distance
+        const sortedAgents = agentsWithDistance.sort((a, b) => a.distance - b.distance);
+
+        res.status(200).json(sortedAgents);
+    } catch (error) {
+        console.error("Error finding nearby agents:", error);
+        res.status(500).json({ error: "Failed to find nearby agents." });
+    }
+};
