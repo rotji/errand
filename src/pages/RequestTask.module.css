@@ -15,16 +15,30 @@
   flex-direction: column;
 }
 
-.form label {
+.label {
+  color: #333; /* Same color for all labels */
   margin-bottom: 5px;
   font-weight: bold;
 }
 
-.form input {
+.input,
+.textarea {
   padding: 8px;
-  margin-bottom: 15px;
+  margin-bottom: 10px;
   border: 1px solid #ccc;
   border-radius: 4px;
+  color: #333; /* Ensures text inside input/textarea matches label color */
+}
+
+.textarea {
+  resize: vertical;
+  height: 100px;
+}
+
+.input::placeholder,
+.textarea::placeholder {
+  color: #555; /* Slightly darker placeholder color */
+  font-style: italic;
 }
 
 .submitButton {
@@ -38,4 +52,15 @@
 
 .submitButton:hover {
   background-color: #0056b3;
+}
+
+.message {
+  margin-top: 10px;
+  font-size: 16px;
+  color: green;
+  text-align: center;
+}
+
+.message.error {
+  color: red;
 }

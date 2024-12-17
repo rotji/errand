@@ -32,9 +32,17 @@ router.get("/", async (req, res) => {
     }
 });
 
-// Route for finding nearby agents based on location
+// Updated route for finding nearby agents based on location
 router.get("/find", async (req, res) => {
+    const { lat, lng } = req.query;
+
+    // Validate that latitude and longitude are provided
+    if (!lat || !lng) {
+        return res.status(400).json({ error: "Latitude and longitude are required" });
+    }
+
     try {
+        // Delegate to the controller for finding nearby agents
         await agentController.findNearbyAgents(req, res);
     } catch (error) {
         console.error("Error in /find route:", error);

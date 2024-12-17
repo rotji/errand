@@ -31,16 +31,14 @@ const TaskForm = ({ onSubmit }) => {
           required
         />
       </label>
-      <label className={styles.label}>
-        Description:
-        <textarea
-          name="description"
-          value={taskData.description}
-          onChange={handleChange}
-          className={styles.input}
-          required
-        />
-      </label>
+      <textarea
+        name="description"
+        value={taskData.description}
+        onChange={handleChange}
+        className={styles.input}
+        placeholder="Description" // Placeholder text inside the box
+        required
+      />
       <button type="submit" className={styles.submitButton}>
         Submit Task
       </button>

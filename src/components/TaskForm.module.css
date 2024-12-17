@@ -16,6 +16,15 @@
  margin-bottom: 15px;
  border: 1px solid #ccc;
  border-radius: 4px;
+ font-size: 14px;
+ color: #333;
+}
+
+.input::placeholder {
+ color: #aaa;
+ /* Placeholder text color */
+ font-style: italic;
+ /* Optional styling for placeholder */
 }
 
 .submitButton {
