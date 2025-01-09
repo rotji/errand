@@ -11,15 +11,18 @@ const Header = () => {
       <nav className={styles.nav}>
         <Link to="/" className={styles.link}>Home</Link>
         <Link to="/about" className={styles.link}>About</Link>
-        <Link to="/register" className={styles.link}>Register</Link> {/* Added className */}
+        <Link to="/register" className={styles.link}>Register</Link> 
         <Link to="/login" className={styles.link}>Login</Link>
-        <Link to="/dashboard" className={styles.link}>Dashboard</Link> {/* Added className */}
-        <Link to="/analytics" className={styles.link}>Analytics</Link> {/* Fixed <li> tag */}
+        <Link to="/dashboard" className={styles.link}>Dashboard</Link> 
+        <Link to="/analytics" className={styles.link}>Analytics</Link> 
         <Link to="/verify-agent" className={styles.link}>Verify Agent</Link>
         <Link to="/agents-list" className={styles.link}>Agents List</Link>
-        <Link to="/find-agent" className={styles.link}>Find Agent</Link> {/* New link */}
-        <Link to="/request-task" className={styles.link}>Request Task</Link> {/* New link */}
-        <Link to="/agent-profile" className={styles.link}>Agent Profile</Link> {/* New link */}
+        <Link to="/find-agent" className={styles.link}>Find Agent</Link> 
+        <Link to="/request-task" className={styles.link}>Request Task</Link> 
+        <Link to="/agent-profile" className={styles.link}>Agent Profile</Link> 
+        <Link to="/user-dashboard" className={styles.link}>User Dashboard</Link>
+        <Link to="/agent-dashboard" className={styles.link}>Agent Dashboard</Link> 
+        <Link to="/tasks" className={styles.link}>Tasks</Link>
       </nav>
     </header>
   );

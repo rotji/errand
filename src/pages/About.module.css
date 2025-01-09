@@ -11,4 +11,10 @@
 .description {
  color: #555;
  font-size: 1.2rem;
+ line-height: 1.5;
+ /* Adjust this to control spacing between lines */
+ max-width: 600px;
+ /* Constrain the width of the text */
+ margin: 0 auto;
+ /* Center-align within the container */
 }

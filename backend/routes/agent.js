@@ -2,6 +2,8 @@ const express = require("express");
 const router = express.Router();
 const agentController = require("../controllers/agentController"); // Import the agentController
 
+// Existing Routes
+
 // Route for creating a new agent
 router.post("/create", async (req, res) => {
     try {
@@ -47,6 +49,68 @@ router.get("/find", async (req, res) => {
     } catch (error) {
         console.error("Error in /find route:", error);
         res.status(500).json({ error: "Failed to find nearby agents." });
+    }
+});
+
+// Route for agents to bid on a task
+router.post("/:agentId/bid/:taskId", async (req, res) => {
+    try {
+        await agentController.placeBid(req, res);
+    } catch (error) {
+        console.error("Error in /:agentId/bid/:taskId route:", error);
+        res.status(500).json({ error: "Failed to place a bid on the task." });
+    }
+});
+
+// Route to retrieve all bids placed by an agent
+router.get("/:agentId/bids", async (req, res) => {
+    try {
+        await agentController.getAgentBids(req, res);
+    } catch (error) {
+        console.error("Error in /:agentId/bids route:", error);
+        res.status(500).json({ error: "Failed to retrieve agent bids." });
+    }
+});
+
+// New Routes
+
+// Get agent details
+router.get("/:id", async (req, res) => {
+    try {
+        await agentController.getAgentDetails(req, res);
+    } catch (error) {
+        console.error("Error in /:id route:", error);
+        res.status(500).json({ error: "Failed to retrieve agent details." });
+    }
+});
+
+// Add or update task
+router.post("/task", async (req, res) => {
+    try {
+        await agentController.addOrUpdateTask(req, res);
+    } catch (error) {
+        console.error("Error in /task route:", error);
+        res.status(500).json({ error: "Failed to add or update task." });
+    }
+});
+
+// Get transaction history
+router.get("/:id/transactions", async (req, res) => {
+    try {
+        await agentController.getTransactionHistory(req, res);
+    } catch (error) {
+        console.error("Error in /:id/transactions route:", error);
+        res.status(500).json({ error: "Failed to retrieve transaction history." });
+    }
+});
+
+// Raise a dispute
+router.post("/dispute", async (req, res) => {
+    try {
+        await agentController.raiseDispute(req, res);
+    } catch (error) {
+        console.error("Error in /dispute route:", error);
+        res.status(500).json({ error: "Failed to raise dispute." });
     }
 });
 

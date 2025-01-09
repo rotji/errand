@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const User = require("../models/User"); // Import the User model
+const { subscribePlan, completeTask } = require("../controllers/userController");
 
 // Create a new user
 router.post("/create", async (req, res) => {
@@ -75,5 +76,12 @@ router.put("/:userId", async (req, res) => {
     res.status(500).json({ error: "Failed to update user profile" });
   }
 });
+
+// Subscribe to a plan
+router.post('/subscribe/:userId', subscribePlan); // Subscribe to a plan
+
+// Complete a task and deduct costs
+router.post('/tasks/complete/:userId/:taskId', completeTask); // Complete a task and deduct costs
+
 
 module.exports = router;

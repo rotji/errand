@@ -9,6 +9,8 @@ const RequestTask = () => {
     from: "",
     to: "",
     phone: "",
+    amount: "", // Task amount
+    transport: "", // Transport amount
   });
 
   const [message, setMessage] = useState(""); // Submission status message
@@ -25,9 +27,12 @@ const RequestTask = () => {
     setIsSubmitting(true);
 
     try {
-      const response = await axios.post("http://localhost:5000/api/tasks", taskDetails);
+      const response = await axios.post("http://localhost:5000/api/tasks", taskDetails, {
+        headers: { "Content-Type": "application/json" },
+      });
+
       setIsSubmitting(false);
-      setMessage("Task submitted successfully!"); // Success message
+      setMessage("Task submitted successfully!");
 
       // Clear the form
       setTaskDetails({
@@ -36,10 +41,14 @@ const RequestTask = () => {
         from: "",
         to: "",
         phone: "",
+        amount: "",
+        transport: "",
       });
     } catch (error) {
       setIsSubmitting(false);
-      setMessage("Failed to submit the task. Please try again.");
+      const errorMessage =
+        error.response?.data?.message || "Failed to submit the task. Please try again.";
+      setMessage(errorMessage);
       console.error("Error submitting task:", error);
     }
   };
@@ -100,7 +109,32 @@ const RequestTask = () => {
           />
         </label>
 
-        {/* Removed "Description:" outside the box */}
+        <label className={styles.label}>
+          Amount:
+          <input
+            type="number"
+            name="amount"
+            value={taskDetails.amount}
+            onChange={handleChange}
+            className={styles.input}
+            placeholder="Task Amount in USD"
+            required
+          />
+        </label>
+
+        <label className={styles.label}>
+          Transport Cost:
+          <input
+            type="number"
+            name="transport"
+            value={taskDetails.transport}
+            onChange={handleChange}
+            className={styles.input}
+            placeholder="Transport Cost in USD"
+            required
+          />
+        </label>
+
         <textarea
           name="description"
           value={taskDetails.description}

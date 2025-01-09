@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styles from "./Register.module.css";
 import axios from "axios";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -12,6 +13,7 @@ const Register = () => {
 
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
+  const navigate = useNavigate(); // Initialize navigate
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -27,7 +29,14 @@ const Register = () => {
     try {
       const response = await axios.post("http://localhost:5000/api/register", formData);
       setMessage(response.data.message); // Display success message
+
+      // Store the email in localStorage after successful registration
+      localStorage.setItem("email", formData.email); // Added this line
+
       setFormData({ name: "", email: "", password: "", role: "user" }); // Reset form
+
+      // Navigate to the About page after successful registration
+      navigate("/about");
     } catch (err) {
       setError(err.response?.data?.error || "Something went wrong"); // Display error
     }

@@ -16,7 +16,8 @@
 }
 
 .label {
-  color: #333; /* Same color for all labels */
+  color: #333;
+  /* Consistent label color */
   margin-bottom: 5px;
   font-weight: bold;
 }
@@ -27,7 +28,8 @@
   margin-bottom: 10px;
   border: 1px solid #ccc;
   border-radius: 4px;
-  color: #333; /* Ensures text inside input/textarea matches label color */
+  color: #333;
+  /* Matches label color */
 }
 
 .textarea {
@@ -37,7 +39,8 @@
 
 .input::placeholder,
 .textarea::placeholder {
-  color: #555; /* Slightly darker placeholder color */
+  color: #555;
+  /* Consistent placeholder color */
   font-style: italic;
 }
 
