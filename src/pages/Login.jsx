@@ -16,6 +16,9 @@ const Login = () => {
       const response = await axios.post("http://localhost:5000/api/login", { email, password });
       console.log("Login successful:", response.data);
 
+      // Store the email in localStorage on successful login
+      localStorage.setItem("email", email); // Added this line
+
       // If successful, navigate to the dashboard or home page
       alert("Login successful");
       navigate('/About'); // Adjust this route to your project requirements

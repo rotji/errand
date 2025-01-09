@@ -22,8 +22,14 @@ import Dashboard from "./pages/Dashboard";
 import Analytics from "./pages/Analytics";
 import AuthForm from "./components/AuthForm"; 
 import "./index.css"; // Ensure global styles are included
+import UserDashboard from "./pages/UserDashboard";
+import AgentDashboard from "./pages/AgentDashboard"; 
 
 const App = () => {
+
+   // Retrieve email from localStorage
+  const userEmail = localStorage.getItem("email"); 
+
   return (
     <ErrorBoundary> {/* Wrap the entire app in the ErrorBoundary */}
       <Router>
@@ -37,10 +43,12 @@ const App = () => {
               <Route path="/login" element={<Login />} />
               <Route path="/agent-verification" element={<AgentVerification />} />
               <Route path="/agents" element={<AgentsList />} />
-              <Route path="/tasks" element={<TasksList />} />
+              <Route path="/tasks" element={<TasksList userEmail={userEmail} />} /> {/* Pass email */}
               <Route path="/users" element={<UsersList />} />
+              <Route path="/agent-dashboard" element={<AgentDashboard />} /> 
               <Route path="/register" element={<Register />} /> 
               <Route path="/login" element={<AuthForm />} />  
+              <Route path="/user-dashboard" element={<UserDashboard userEmail={userEmail} />} /> {/* Pass email */}
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/analytics" element={<Analytics />} />
 

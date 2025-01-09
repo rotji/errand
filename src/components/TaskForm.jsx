@@ -14,7 +14,12 @@ const TaskForm = ({ onSubmit }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSubmit(taskData);
+
+    // Retrieve email from localStorage
+    const email = localStorage.getItem('userEmail'); // Add email to task data
+    const taskDataWithEmail = { ...taskData, email }; // Include email in the task data
+
+    onSubmit(taskDataWithEmail); // Pass the updated task data to the onSubmit function
     setTaskData({ title: '', description: '' });
   };
 
