@@ -14,7 +14,11 @@ exports.registerUser = async (req, res) => {
 
     res.status(201).json({
       message: "User registered successfully",
-      user: newUser,
+      user: {
+        name: newUser.name,
+        email: newUser.email, // Returning email as userId
+        userId: newUser.email, // Explicitly including email as userId
+      },
     });
   } catch (err) {
     if (err.code === 11000) {
@@ -34,7 +38,7 @@ exports.subscribePlan = async (req, res) => {
     const { userId } = req.params;
     const { plan, tasks, expiryDate, cost } = req.body;
 
-    const user = await User.findById(userId);
+    const user = await User.findOne({ email: userId }); // Adjusted to match email as userId
     if (!user) return res.status(404).json({ message: 'User not found' });
 
     user.subscription.plan = plan;
@@ -44,7 +48,7 @@ exports.subscribePlan = async (req, res) => {
     user.transactions.push({
       plan,
       amount: cost,
-      paymentMethod: 'Credit Card', // For simplicity, hardcoding payment method
+      paymentMethod: 'Credit Card',
       details: { tasksCompleted: 0, transportCharges: 0, platformCharges: cost },
     });
 
@@ -61,7 +65,7 @@ exports.completeTask = async (req, res) => {
     const { userId, taskId } = req.params;
     const { transportCost, platformCharge } = req.body;
 
-    const user = await User.findById(userId);
+    const user = await User.findOne({ email: userId }); // Adjusted to match email as userId
     if (!user) return res.status(404).json({ message: 'User not found' });
 
     const task = user.tasks.id(taskId);
@@ -93,18 +97,18 @@ exports.completeTask = async (req, res) => {
   }
 };
 
-// New: Track Task Creators
+// Track Task Creators
 exports.trackTaskCreators = async (req, res) => {
   try {
     const { userId, taskId } = req.params;
 
-    const user = await User.findById(userId);
+    const user = await User.findOne({ email: userId }); // Adjusted to match email as userId
     if (!user) return res.status(404).json({ message: 'User not found' });
 
     const task = user.tasks.id(taskId);
     if (!task) return res.status(404).json({ message: 'Task not found' });
 
-    const creator = task.createdBy; // Assuming `createdBy` is a field in the task schema
+    const creator = task.createdBy;
     if (!creator) return res.status(404).json({ message: 'Creator information not available' });
 
     res.json({

@@ -11,7 +11,7 @@ const TasksList = () => {
     const fetchTasks = async () => {
       try {
         // Fetch email from localStorage
-        const email = localStorage.getItem("email"); // Retrieve email from localStorage
+        const email = localStorage.getItem("userEmail"); // Ensure consistent use of "userEmail"
         if (!email) {
           setError("User email not found. Please log in.");
           return;

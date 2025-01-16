@@ -6,27 +6,36 @@ const userSchema = new mongoose.Schema({
     required: true,
     trim: true,
   },
-  email: { 
+  email: {
     type: String,
     required: true,
     unique: true,
     match: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, // Basic email validation
   },
-  password: {  
+  password: {
     type: String,
     required: true,
     minlength: 4, // Shorter password allowed for prototype
+  },
+  userId: { 
+    type: String,
+    required: true,
+    unique: true,
+    default: function () {
+      return this.email; // Automatically set `userId` to the value of `email`
+    },
   },
   createdAt: {
     type: Date,
     default: Date.now,
   },
-  // Existing fields for subscription, transactions, and tasks
+  // Subscription details
   subscription: {
     plan: { type: String, enum: ['1-task', '2-tasks', '5-tasks', 'custom'], required: false },
     tasksLeft: { type: Number, default: 0 },
     expiryDate: { type: Date, default: null },
   },
+  // Transaction history
   transactions: [
     {
       plan: String,
@@ -40,6 +49,7 @@ const userSchema = new mongoose.Schema({
       },
     },
   ],
+  // Assigned tasks
   tasks: [
     {
       description: String,
@@ -48,7 +58,7 @@ const userSchema = new mongoose.Schema({
       completionDate: Date,
     },
   ],
-  // New: User-created tasks
+  // Created tasks by the user
   createdTasks: [
     {
       title: { type: String, required: true },
@@ -56,10 +66,10 @@ const userSchema = new mongoose.Schema({
       from: { type: String, required: true },
       to: { type: String, required: true },
       phone: { type: String, required: true },
-      status: { type: String, enum: ['open', 'assigned', 'completed'], default: 'open' }, // Task status
+      status: { type: String, enum: ['open', 'assigned', 'completed'], default: 'open' },
       bids: [
         {
-          agent: { type: mongoose.Schema.Types.ObjectId, ref: 'Agent' }, // Reference to the bidding agent
+          agent: { type: mongoose.Schema.Types.ObjectId, ref: 'Agent' },
           amount: Number,
           date: { type: Date, default: Date.now },
           status: { type: String, enum: ['pending', 'accepted', 'rejected'], default: 'pending' },
