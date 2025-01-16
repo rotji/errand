@@ -32,9 +32,10 @@ router.post("/", async (req, res) => {
       return res.status(400).json({ error: "Invalid credentials" });
     }
 
-    // Respond with success
+    // Update: Return email as `userId` on successful login
     res.status(200).json({
       message: "Login successful",
+      userId: email, // Add email as userId
       accountType,
       account: {
         name: account.name,

@@ -35,15 +35,16 @@ export const fetchUserTasks = async (userId) => {
   }
 };
 
-// Function to create a new task
+// Function to create a new task using fetch
 export const createTask = async (taskData) => {
   try {
-    // Retrieve email from localStorage and include it in the taskData
-    const email = localStorage.getItem("userEmail");
-    const taskDataWithEmail = { ...taskData, email }; // Add email to the task data
-
-    const response = await apiClient.post("/tasks", taskDataWithEmail); // Send updated task data
-    return response.data;
+    const response = await fetch("http://localhost:5000/api/tasks", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(taskData),
+    });
+    if (!response.ok) throw new Error("Failed to create task");
+    return response.json();
   } catch (error) {
     console.error("Error creating task:", error);
     throw error;

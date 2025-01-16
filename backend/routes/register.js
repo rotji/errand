@@ -34,9 +34,15 @@ router.post("/", async (req, res) => {
       await newEntry.save();
     }
 
+    // Update: Return email as `userId` on successful registration
     res.status(201).json({
       message: "Registration successful",
-      entry: newEntry,
+      userId: email, // Add email as userId
+      entry: {
+        name: newEntry.name,
+        email: newEntry.email,
+        role: newEntry.role,
+      },
     });
   } catch (err) {
     console.error(err);

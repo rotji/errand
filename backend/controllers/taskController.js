@@ -1,17 +1,14 @@
 const taskService = require("../services/TaskService");
 
 // Controller to create a task
-exports.createTask = async (req, res) => {
+const createTask = async (req, res) => {
   try {
-    const { title, description, from, to, phone, amount, transport, userId } = req.body;
+    const { title, description, from, to, phone, amount, transport } = req.body;
+    const userId = req.body.userId || req.headers["user-email"];
 
     if (!title || !description || !from || !to || !phone || !amount || !transport || !userId) {
+      console.log("Validation failed: Missing required fields", { title, description, from, to, phone, amount, transport, userId });
       return res.status(400).json({ error: "All fields are required" });
-    }
-
-    const existingTask = await taskService.getTaskByTitleAndUserId(title, userId);
-    if (existingTask) {
-      return res.status(400).json({ error: "A task with the same title already exists for this user" });
     }
 
     const newTask = {
@@ -29,6 +26,11 @@ exports.createTask = async (req, res) => {
     };
 
     const task = await taskService.createTask(newTask);
+
+    if (!task) {
+      return res.status(500).json({ error: "Failed to save the task" });
+    }
+
     res.status(201).json({ message: "Task created successfully", task });
   } catch (error) {
     console.error("Error creating task:", error);
@@ -36,76 +38,10 @@ exports.createTask = async (req, res) => {
   }
 };
 
-// Controller to fetch all tasks
-exports.getAllTasks = async (req, res) => {
-  try {
-    const tasks = await taskService.getAllTasks();
-
-    if (!tasks.length) {
-      return res.status(404).json({ message: "No tasks found" });
-    }
-
-    res.status(200).json({ tasks });
-  } catch (error) {
-    console.error("Error fetching tasks:", error);
-    res.status(500).json({ error: "An error occurred while fetching tasks" });
-  }
-};
-
-// Controller to submit a task
-exports.submitTask = async (req, res) => {
-  try {
-    const { taskId, userId } = req.body;
-
-    if (!taskId || !userId) {
-      return res.status(400).json({ error: "Task ID and User ID are required" });
-    }
-
-    const task = await taskService.getTaskById(taskId);
-    if (!task) {
-      return res.status(404).json({ error: "Task not found" });
-    }
-
-    const result = await taskService.submitTask(taskId, userId);
-    res.status(200).json({ message: "Task submitted successfully", result });
-  } catch (error) {
-    console.error("Error submitting task:", error);
-    res.status(500).json({ error: "An error occurred while submitting the task" });
-  }
-};
-
-// Controller to place a bid on a task
-exports.placeBid = async (req, res) => {
-  try {
-    const { taskId } = req.params;
-    const { agentId, bidAmount } = req.body;
-
-    if (!taskId || !agentId || !bidAmount) {
-      return res.status(400).json({ error: "Task ID, Agent ID, and Bid Amount are required" });
-    }
-
-    const task = await taskService.getTaskById(taskId);
-    if (!task) {
-      return res.status(404).json({ error: "Task not found" });
-    }
-
-    const existingBid = task.bids.find((bid) => bid.agentId === agentId);
-    if (existingBid) {
-      return res.status(400).json({ error: "Agent has already bid on this task" });
-    }
-
-    const updatedTask = await taskService.addBid(taskId, { agentId, bidAmount, bidTime: new Date() });
-    res.status(200).json({ message: "Bid placed successfully", updatedTask });
-  } catch (error) {
-    console.error("Error placing bid:", error);
-    res.status(500).json({ error: "An error occurred while placing a bid" });
-  }
-};
-
 // Controller to fetch tasks created by a specific user
-exports.getUserTasks = async (req, res) => {
+const getUserTasks = async (req, res) => {
   try {
-    const { userId } = req.query;
+    const userId = req.query.userId || req.headers["user-email"];
 
     if (!userId) {
       return res.status(400).json({ error: "User ID is required" });
@@ -113,7 +49,7 @@ exports.getUserTasks = async (req, res) => {
 
     const tasks = await taskService.getTasksByUserId(userId);
 
-    if (!tasks.length) {
+    if (!tasks || tasks.length === 0) {
       return res.status(404).json({ message: "No tasks found for this user" });
     }
 
@@ -124,50 +60,46 @@ exports.getUserTasks = async (req, res) => {
   }
 };
 
-// Controller to get all bids for a specific task
-exports.getTaskBids = async (req, res) => {
+// Controller to fetch all tasks
+const getAllTasks = async (req, res) => {
   try {
-    const { taskId } = req.params;
+    const tasks = await taskService.getAllTasks();
 
-    if (!taskId) {
-      return res.status(400).json({ error: "Task ID is required" });
+    if (!tasks || tasks.length === 0) {
+      return res.status(404).json({ message: "No tasks found" });
     }
 
-    const task = await taskService.getTaskById(taskId);
-    if (!task) {
-      return res.status(404).json({ error: "Task not found" });
-    }
-
-    res.status(200).json({ bids: task.bids });
+    res.status(200).json({ tasks });
   } catch (error) {
-    console.error("Error fetching task bids:", error);
-    res.status(500).json({ error: "An error occurred while fetching task bids" });
+    console.error("Error fetching all tasks:", error);
+    res.status(500).json({ error: "An error occurred while fetching tasks" });
   }
 };
 
-// Controller to accept a bid for a task
-exports.acceptBid = async (req, res) => {
+// Define the submitTask function (for now, responding with a success message)
+const submitTask = async (req, res) => {
+  console.log("Received request for submitTask:", req.body);
   try {
-    const { taskId, bidId } = req.params;
+    const { taskId, userId } = req.body;
 
-    if (!taskId || !bidId) {
-      return res.status(400).json({ error: "Task ID and Bid ID are required" });
+    if (!taskId || !userId) {
+      return res.status(400).json({ error: "Task ID and User ID are required" });
     }
 
-    const task = await taskService.getTaskById(taskId);
-    if (!task) {
-      return res.status(404).json({ error: "Task not found" });
-    }
+    // Placeholder logic for submitting a task (this should be expanded with task submission logic)
+    // You might want to update the task status or perform other actions here
 
-    const bid = task.bids.find((b) => b._id.toString() === bidId);
-    if (!bid) {
-      return res.status(404).json({ error: "Bid not found" });
-    }
-
-    const result = await taskService.acceptBid(taskId, bid);
-    res.status(200).json({ message: "Bid accepted successfully", acceptedBid: bid });
+    res.status(200).json({ message: "Task submitted successfully!" });
   } catch (error) {
-    console.error("Error accepting bid:", error);
-    res.status(500).json({ error: "An error occurred while accepting the bid" });
+    console.error("Error submitting task:", error);
+    res.status(500).json({ error: "An error occurred while submitting the task" });
   }
+};
+
+// Export all controllers
+module.exports = {
+  createTask,
+  getUserTasks,
+  getAllTasks,
+  submitTask,
 };
