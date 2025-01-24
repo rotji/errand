@@ -35,19 +35,14 @@ export const fetchUserTasks = async (userId) => {
   }
 };
 
-// Function to create a new task using fetch
+// Function to create a new task using axios
 export const createTask = async (taskData) => {
   try {
-    const response = await fetch("http://localhost:5000/api/tasks", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(taskData),
-    });
-    if (!response.ok) throw new Error("Failed to create task");
-    return response.json();
+    const response = await apiClient.post("/tasks", taskData); // Use axios to send POST request
+    return response.data; // Return the response data from the backend
   } catch (error) {
     console.error("Error creating task:", error);
-    throw error;
+    throw error; // Rethrow the error so it can be handled in the calling component
   }
 };
 

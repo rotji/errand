@@ -1,7 +1,10 @@
+console.log("Starting controllers/task.js");
+
 const taskService = require("../services/TaskService");
 
 // Controller to create a task
 const createTask = async (req, res) => {
+  console.log("Inside createTask Controller");
   try {
     const { title, description, from, to, phone, amount, transport } = req.body;
     const userId = req.body.userId || req.headers["user-email"];
@@ -40,6 +43,7 @@ const createTask = async (req, res) => {
 
 // Controller to fetch tasks created by a specific user
 const getUserTasks = async (req, res) => {
+  console.log("Inside getTasks Controller");
   try {
     const userId = req.query.userId || req.headers["user-email"];
 
@@ -96,10 +100,32 @@ const submitTask = async (req, res) => {
   }
 };
 
+// Add the placeBid function here
+const placeBid = async (req, res) => {
+  // Placeholder logic
+  res.status(200).send("Bid placed successfully.");
+};
+
+// getTaskBids function
+const getTaskBids = (req, res) => {
+  res.status(200).send({ message: "getTaskBids functionality is not implemented yet." });
+};
+
+// acceptBid function
+const acceptBid = (req, res) => {
+  res.status(200).send({ message: "acceptBid functionality is not implemented yet." });
+};
+
+
+
 // Export all controllers
 module.exports = {
   createTask,
   getUserTasks,
   getAllTasks,
   submitTask,
+  placeBid,
+  getTaskBids,
+  acceptBid,
 };
+console.log("controllers/task.js exported successfully");

@@ -1,8 +1,11 @@
+// Test if console.log works
+console.log("Testing if console.log is working in the project");
+
 require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
-const { connectToMongoDB } = require("./utils/mongoClient"); // Adjust the path to your mongoClient.js
+const { connectToMongoDB } = require("./utils/mongoClient"); 
 const analyticsRoutes = require("./routes/analyticsRoutes");
 
 const app = express();
@@ -21,13 +24,21 @@ app.get("/", (req, res) => {
 const agentRoutes = require("./routes/agent");
 const userRoutes = require("./routes/user");
 const taskRoutes = require("./routes/task");
+console.log("Task Routes:", taskRoutes); 
 const registerRoute = require("./routes/register");
 const loginRoute = require("./routes/login");
 
 // Use routes
 app.use("/api/agents", agentRoutes);
 app.use("/api/users", userRoutes);
-app.use("/tasks", taskRoutes); 
+app.use("/api/tasks", (req, res, next) => {
+    if (req.body.email) {
+        req.body.userId = req.body.email; // Use email as the userId
+    }
+    console.log("Middleware called for /api/tasks");
+    next();
+}, taskRoutes); // Combine middleware and routes
+
 app.use("/api/register", registerRoute);
 app.use("/api/login", loginRoute);
 app.use("/api/analytics", analyticsRoutes);
@@ -69,11 +80,6 @@ app.use("/api/tasks", (req, res, next) => {
   next(); // Proceed to task routes
 });
 
-// Temporary route for debugging POST requests to /api/tasks
-app.post("/api/tasks", (req, res) => {
-  console.log(req.body); // Log the incoming request body
-  res.status(200).send("Request received!"); // Respond with a simple message
-});
 
 // Global error handler
 app.use((err, req, res, next) => {
@@ -85,3 +91,4 @@ app.use((err, req, res, next) => {
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
 });
+

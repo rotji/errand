@@ -9,6 +9,7 @@ const RequestTask = () => {
     from: "",
     to: "",
     phone: "",
+    email: "",
     amount: "", // Task amount
     transport: "", // Transport amount
   });
@@ -27,7 +28,7 @@ const RequestTask = () => {
     setIsSubmitting(true);
 
     try {
-      const response = await axios.post("http://localhost:5000/api/tasks", taskDetails, {
+      const response = await axios.post("http://localhost:5000/api/tasks/create", taskDetails, {
         headers: { "Content-Type": "application/json" },
       });
 
@@ -41,6 +42,7 @@ const RequestTask = () => {
         from: "",
         to: "",
         phone: "",
+        email: "",
         amount: "",
         transport: "",
       });
@@ -108,6 +110,20 @@ const RequestTask = () => {
             required
           />
         </label>
+
+        <label className={styles.label}>
+          Email:
+          <input
+            type="email"
+            name="email"
+            value={taskDetails.email}
+            onChange={handleChange}
+            className={styles.input}
+            placeholder="Email"
+            required
+          />
+        </label>
+
 
         <label className={styles.label}>
           Amount:
