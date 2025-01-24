@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from './TaskForm.module.css';
-import { createTask } from './utils/api'; // Ensure this utility is implemented correctly
+import { createTask } from './utils/api';
 
 const TaskForm = ({ onSubmit }) => {
   const [taskData, setTaskData] = useState({
@@ -11,7 +11,16 @@ const TaskForm = ({ onSubmit }) => {
     phone: '',
     amount: '',
     transport: '',
+    email: '' // New email field
   });
+
+  // Pre-fill email field from localStorage (if available)
+  useEffect(() => {
+    const storedEmail = localStorage.getItem('email');
+    if (storedEmail) {
+      setTaskData((prevData) => ({ ...prevData, email: storedEmail }));
+    }
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -20,13 +29,19 @@ const TaskForm = ({ onSubmit }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     try {
+      // Use the email from the form if available, else fallback to localStorage
       const taskDataWithUser = {
         ...taskData,
-        userId: localStorage.getItem('email'), // Retrieve email from localStorage
+        userId: taskData.email || localStorage.getItem('email'), // Check if email is entered; else use the localStorage value
       };
-      await createTask(taskDataWithUser); // Send task data to the backend
+      
+      // Send task data to the backend
+      await createTask(taskDataWithUser);
       alert('Task created successfully!');
+
+      // Reset the form
       setTaskData({
         title: '',
         description: '',
@@ -35,6 +50,7 @@ const TaskForm = ({ onSubmit }) => {
         phone: '',
         amount: '',
         transport: '',
+        email: '', // Reset email
       });
     } catch (error) {
       console.error('Error creating task:', error);
@@ -116,6 +132,17 @@ const TaskForm = ({ onSubmit }) => {
           type="text"
           name="transport"
           value={taskData.transport}
+          onChange={handleChange}
+          className={styles.input}
+          required
+        />
+      </label>
+      <label className={styles.label}>
+        Email:
+        <input
+          type="email"
+          name="email"
+          value={taskData.email}
           onChange={handleChange}
           className={styles.input}
           required
