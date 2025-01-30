@@ -74,11 +74,13 @@ mongoose
 
 // Middleware to map email as `userId` in task-related routes
 app.use("/api/tasks", (req, res, next) => {
-  if (req.body.email) {
-    req.body.userId = req.body.email; // Use email as the userId
+  if (["POST", "PUT", "DELETE"].includes(req.method) && req.body.email) {
+    req.body.userId = req.body.email; // Map email to userId
   }
-  next(); // Proceed to task routes
+  console.log("Middleware called for /api/tasks");
+  next(); // Proceed to route handler
 });
+
 
 
 // Global error handler

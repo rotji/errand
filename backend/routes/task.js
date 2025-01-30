@@ -3,51 +3,96 @@ console.log("Starting routes/task.js");
 const express = require("express");
 const router = express.Router();
 const taskController = require("../controllers/taskController");
+const { connectToMongoDB } = require('../utils/mongoClient');
+
 console.log("Task Controller imported:", taskController);
 
-
-// Middleware to associate tasks with email
-// Ensure routes handling tasks associate tasks with email (from request body or headers)
-router.use((req, res, next) => {
-  if (req.body.email) {
-    req.body.userId = req.body.email; // Use email as userId for association
-  } else if (req.headers["user-email"]) {
-    req.body.userId = req.headers["user-email"]; // Alternative: Use email from headers
+// Middleware for MongoDB connection
+router.use(async (req, res, next) => {
+  try {
+    req.db = await connectToMongoDB(); // Attach DB instance to request
+    next();
+  } catch (error) {
+    console.error("Database connection error:", error);
+    res.status(500).json({ error: "Failed to connect to the database" });
   }
-  next(); // Proceed to the next middleware/route handler
 });
 
+// Middleware for associating tasks with email
+router.use((req, res, next) => {
+  if (["POST", "PUT", "DELETE"].includes(req.method)) {
+    const email = req.body.email || req.headers["user-email"];
+    if (!email) {
+      return res.status(400).json({ error: "Email is required for task association." });
+    }
+    req.body.userId = email;
+  }
+  next();
+});
 
 // Route to create a new task
-router.post("/create", taskController.createTask);
-console.log("POST /create route defined");
-
-// Route to fetch all tasks (optional, for admin or debugging purposes)
-router.get("/user-tasks", taskController.getAllTasks);
-
-// New Routes
-
-// Route to submit a task by a user
-router.post("/submit", (req, res, next) => {
-  console.log("POST /submit route hit");
-  taskController.submitTask(req, res, next);
+router.post("/create", async (req, res, next) => {
+  try {
+    await taskController.createTask(req, res, next);
+  } catch (error) {
+    next(error);
+  }
 });
 
+// Route to fetch all tasks (for admin or debugging)
+router.get("/all-tasks", async (req, res, next) => {
+  try {
+    await taskController.getAllTasks(req, res, next);
+  } catch (error) {
+    next(error);
+  }
+});
 
+// Route to fetch tasks created by a specific user
+router.get("/:userId", async (req, res, next) => {
+  try {
+    await taskController.getUserTasks(req, res, next);
+  } catch (error) {
+    next(error);
+  }
+});
 
+// Route to submit a task
+router.post("/submit", async (req, res, next) => {
+  console.info("POST /submit route hit");
+  try {
+    await taskController.submitTask(req, res, next);
+  } catch (error) {
+    next(error);
+  }
+});
 
-// Route for agents to place a bid on a task
-router.post("/:taskId/bid", taskController.placeBid);
-
-// Endpoint to fetch tasks created by a specific user
-router.get("/user-tasks", taskController.getUserTasks);
-console.log("GET /list route defined");
+// Route to place a bid on a task
+router.post("/:taskId/bid", async (req, res, next) => {
+  try {
+    await taskController.placeBid(req, res, next);
+  } catch (error) {
+    next(error);
+  }
+});
 
 // Route to get all bids for a specific task
-router.get("/:taskId/bids", taskController.getTaskBids);
+router.get("/:taskId/bids", async (req, res, next) => {
+  try {
+    await taskController.getTaskBids(req, res, next);
+  } catch (error) {
+    next(error);
+  }
+});
 
 // Route to accept a bid for a task
-router.patch("/:taskId/bids/:bidId/accept", taskController.acceptBid);
+router.patch("/:taskId/bids/:bidId/accept", async (req, res, next) => {
+  try {
+    await taskController.acceptBid(req, res, next);
+  } catch (error) {
+    next(error);
+  }
+});
 
 module.exports = router;
 console.log("routes/task.js exported successfully");
