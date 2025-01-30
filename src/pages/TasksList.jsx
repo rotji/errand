@@ -3,23 +3,23 @@ import TaskCard from "../components/TaskCard"; // Adjust the path if necessary
 import styles from "./TasksList.module.css";
 import apiClient from "../components/utils/api";
 
-const TasksList = () => {
+const TasksList = ({ loggedInEmail }) => {
   const [tasks, setTasks] = useState([]);
   const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchTasks = async () => {
       try {
-        // Fetch email from localStorage
-        const email = localStorage.getItem("userEmail"); // Ensure consistent use of "userEmail"
-        if (!email) {
-          setError("User email not found. Please log in.");
+        // Determine which email to use
+        const emailToUse = loggedInEmail || localStorage.getItem("userEmail"); // Use loggedInEmail first, fallback to localStorage
+        if (!emailToUse) {
+          setError("User email not found. Please log in."); // Handle case when no email is found
           return;
         }
 
         // Fetch tasks from the backend API
         const response = await apiClient.get("/tasks/user-tasks", {
-          params: { userId: email }, // Use email as the userId
+          params: { userId: emailToUse }, // Use the determined email as userId
         });
 
         console.log("Response:", response.data); // Log response data for debugging
@@ -31,7 +31,7 @@ const TasksList = () => {
     };
 
     fetchTasks();
-  }, []); // No dependency on props, as email is retrieved from localStorage
+  }, [loggedInEmail]); // Re-fetch tasks whenever loggedInEmail changes
 
   const handleBid = (taskId) => {
     console.log("Bidding on task:", taskId);

@@ -1,4 +1,5 @@
-import React, { createContext } from "react"; // Added createContext
+import React, { createContext, useState } from "react";
+
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import About from "./pages/About";
@@ -30,7 +31,7 @@ export const APIContext = createContext();
 
 const App = () => {
   // Retrieve email from localStorage
-  const userEmail = localStorage.getItem("email");
+  const [loggedInEmail, setLoggedInEmail] = useState(localStorage.getItem("email") || "");
 
   // API Base URL
   const apiBaseURL = "http://localhost:5000";
@@ -49,12 +50,16 @@ const App = () => {
                 <Route path="/login" element={<Login />} />
                 <Route path="/agent-verification" element={<AgentVerification />} />
                 <Route path="/agents" element={<AgentsList />} />
-                <Route path="/tasks" element={<TasksList userEmail={userEmail} />} /> {/* Pass email */}
+                <Route
+                  path="/tasks"
+                  element={<TasksList loggedInEmail={loggedInEmail} />} />
                 <Route path="/users" element={<UsersList />} />
                 <Route path="/agent-dashboard" element={<AgentDashboard />} />
                 <Route path="/register" element={<Register />} />
                 <Route path="/login" element={<AuthForm />} />
-                <Route path="/user-dashboard" element={<UserDashboard userEmail={userEmail} />} /> {/* Pass email */}
+                <Route
+                  path="/user-dashboard"
+                  element={<UserDashboard userEmail={loggedInEmail} />} />
                 <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/analytics" element={<Analytics />} />
 
