@@ -1,11 +1,15 @@
-import React, { useEffect, useState } from "react";
-import TaskCard from "../components/TaskCard"; // Adjust the path if necessary
+import React, { useEffect, useState, useContext } from "react";
+import TaskCard from "../components/TaskCard"; 
 import styles from "./TasksList.module.css";
 import apiClient from "../components/utils/api";
+import { APIContext } from "../App";
+
 
 const TasksList = ({ loggedInEmail }) => {
   const [tasks, setTasks] = useState([]);
   const [error, setError] = useState(null);
+  const apiBaseURL = useContext(APIContext);
+  
 
   useEffect(() => {
     const fetchTasks = async () => {
@@ -17,15 +21,18 @@ const TasksList = ({ loggedInEmail }) => {
           return;
         }
 
-        // Fetch tasks from the backend API
-        const response = await apiClient.get("/tasks/user-tasks", {
-          params: { userId: emailToUse }, // Use the determined email as userId
+        // Fetch tasks using the API endpoint
+        const response = await fetch(`${apiBaseURL}/tasks/${emailToUse}`, {
+          headers: { "Content-Type": "application/json" },
         });
+        if (!response.ok) {
+          throw new Error("Failed to fetch tasks.");
+        }
 
-        console.log("Response:", response.data); // Log response data for debugging
-        setTasks(response.data.tasks || []); // Handle tasks or fallback to an empty array
+        const data = await response.json();
+        setTasks(data); // Update tasks state
       } catch (err) {
-        console.error("Error fetching tasks:", err); // Log errors for debugging
+        console.error("Error fetching tasks:", err);
         setError("Failed to load tasks. Please try again later.");
       }
     };
