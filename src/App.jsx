@@ -34,8 +34,8 @@ const App = () => {
   const [loggedInEmail, setLoggedInEmail] = useState(localStorage.getItem("email") || "");
 
   // API Base URL
-  const apiBaseURL = "http://localhost:5000";
-
+  const apiBaseURL = "http://localhost:5000/api"; 
+  
   return (
     <APIContext.Provider value={apiBaseURL}> {/* Provide API base URL */}
       <ErrorBoundary> {/* Wrap the entire app in the ErrorBoundary */}
