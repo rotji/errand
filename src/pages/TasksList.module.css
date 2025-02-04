@@ -1,8 +1,8 @@
 /* TaskList.module.css */
 
 .container {
- padding: 20px;
- max-width: 800px;
+ padding: 10px;
+ max-width: 400px;
  margin: 0 auto;
  background-color: #f9f9f9;
  border-radius: 8px;
@@ -25,6 +25,8 @@
 .task {
  padding: 12px;
  margin: 8px 0;
+ width: 90%; 
+ max-width: 400px;  
  border: 1px solid #ddd;
  border-radius: 4px;
  background-color: #fff;

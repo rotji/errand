@@ -25,16 +25,21 @@ async function connectToMongoDB() {
   }
 }
 
-// Query helper for tasks by email (userId)
-async function getTasksByEmail(email) {
+// Query helper for fetching all tasks
+async function getAllTasks() {
   try {
     const db = await connectToMongoDB();
-    const tasks = await db.collection("tasks").find({ userEmail: email }).toArray();
+    const tasks = await db
+      .collection("tasks")
+      .find()  // ✅ Fetch all tasks (no filter)
+      .sort({ _id: -1 })  // ✅ Newest tasks appear at the top
+      .toArray();
     return tasks;
   } catch (error) {
-    console.error("Error fetching tasks by email:", error);
-    throw error; // Re-throw the error for handling elsewhere
+    console.error("Error fetching all tasks:", error);
+    throw error;
   }
 }
 
-module.exports = { connectToMongoDB, mongoClient, getTasksByEmail };
+module.exports = { connectToMongoDB, mongoClient, getAllTasks, };
+
