@@ -35,7 +35,9 @@ const TaskCard = ({ task, onBid }) => {
       <p className={styles.taskDetails}>
         <strong>From:</strong> {task.from} <br />
         <strong>To:</strong> {task.to} <br />
-        <strong>Phone:</strong> {task.phone}
+        <strong>Phone:</strong> {task.phone} <br />
+        <strong>Amount:</strong> ${task.amount} <br />
+        <strong>Transport Fees:</strong> ${task.transport}
       </p>
       <button className={styles.bidTaskButton} onClick={() => onBid(task._id)}>
         Bid Task
@@ -59,6 +61,8 @@ TaskCard.propTypes = {
     from: PropTypes.string.isRequired,
     to: PropTypes.string.isRequired,
     phone: PropTypes.string.isRequired,
+    amount: PropTypes.string.isRequired, 
+    transport: PropTypes.string.isRequired, 
     creatorId: PropTypes.string, // Optional if creatorId isn't always available
   }).isRequired,
   onBid: PropTypes.func.isRequired,
