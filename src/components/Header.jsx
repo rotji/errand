@@ -8,7 +8,11 @@ const Header = () => {
   return (
     <header className={styles.header}>
       <div className={styles.logo}>
-        <Link to="/" className={styles.link}>Errand</Link>
+        {/* Apply the .title class to give it a different color */}
+        <Link to="/" className={styles.title}>Errand</Link>
+        <Link to="/">
+          <img src="/logo.png" alt="Errand Logo" className={styles.logoImg} />
+        </Link>
       </div>
 
       {/* Regular Navigation Links */}
