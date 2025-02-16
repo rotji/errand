@@ -6,12 +6,13 @@ const router = express.Router();
 
 // POST /register
 router.post("/", async (req, res) => {
-  const { name, email, password, role } = req.body;
+  const { name, email, phone, password, role } = req.body;
 
   // Basic validation
-  if (!name || !email || !password || !role) {
-    return res.status(400).json({ error: "All fields are required" });
-  }
+  if (!name || !email || !phone || !password || !role) {
+  return res.status(400).json({ error: "All fields are required" });
+}
+
 
   try {
     // Check if the email is already registered
@@ -26,11 +27,11 @@ router.post("/", async (req, res) => {
 
     if (role === "agent") {
       // Save to the Agent collection
-      newEntry = new Agent({ name, email, password, role });
+      newEntry = new Agent({ name, email, phone, password, role });
       await newEntry.save();
     } else {
       // Default to saving to the User collection
-      newEntry = new User({ name, email, password, role });
+      newEntry = new User({ name, email, phone, password, role });
       await newEntry.save();
     }
 
@@ -41,6 +42,7 @@ router.post("/", async (req, res) => {
       entry: {
         name: newEntry.name,
         email: newEntry.email,
+        phone: newEntry.phone,
         role: newEntry.role,
       },
     });

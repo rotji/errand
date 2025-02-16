@@ -25,6 +25,7 @@ import AuthForm from "./components/AuthForm";
 import "./index.css"; // Ensure global styles are included
 import UserDashboard from "./pages/UserDashboard";
 import AgentDashboard from "./pages/AgentDashboard";
+import BidsList from "./pages/BidsList";
 
 // Create API context
 export const APIContext = createContext();
@@ -65,6 +66,7 @@ const App = () => {
 
                 <Route path="/request-task" element={<RequestTask />} />
                 <Route path="/find-agent" element={<FindAgent />} />
+                <Route path="/bids" element={<BidsList />} />
                 <Route path="/agent-profile" element={<AgentProfile />} />
                 <Route
                   path="/agent-card"

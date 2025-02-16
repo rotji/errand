@@ -2,7 +2,7 @@ const User = require("../models/User");
 
 // Register a new user
 exports.registerUser = async (req, res) => {
-  const { name, email, password } = req.body;
+  const { name, email, password, phone } = req.body;
 
   if (!name || !email || !password) {
     return res.status(400).json({ error: "All fields are required" });
@@ -10,6 +10,7 @@ exports.registerUser = async (req, res) => {
 
   try {
     const newUser = new User({ name, email, password });
+    if (phone) newUser.phone = phone;
     await newUser.save();
 
     res.status(201).json({
@@ -18,6 +19,7 @@ exports.registerUser = async (req, res) => {
         name: newUser.name,
         email: newUser.email, // Returning email as userId
         userId: newUser.email, // Explicitly including email as userId
+        phone: newUser.phone || null, // Return phone if available, else null
       },
     });
   } catch (err) {

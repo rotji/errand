@@ -4,6 +4,7 @@ import styles from "./TasksList.module.css";
 import apiClient from "../components/utils/api";
 import { APIContext } from "../App";
 import RequestTask from "../pages/RequestTask";
+import { placeBid } from "../components/utils/api";
 
 const TasksList = () => {
   const [tasks, setTasks] = useState([]);
@@ -38,9 +39,14 @@ const TasksList = () => {
     setTasks((prevTasks) => [newTask, ...prevTasks]);
   };
 
-  const handleBid = (taskId) => {
-    console.log("Bidding on task:", taskId);
-    // Implement the bidding logic here if necessary
+  const handleBid = async (taskId) => {
+    try {
+      const agentId = localStorage.getItem("agentId") || "agent@example.com";
+      const result = await placeBid(taskId, agentId);
+      console.log("Bid placed successfully", result);
+    } catch (error) {
+      console.error("Error placing bid", error);
+    }
   };
 
   return (
