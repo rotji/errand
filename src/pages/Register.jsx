@@ -8,11 +8,13 @@ const Register = () => {
     name: "",
     email: "",
     password: "",
+    phone: "",
     role: "user", // Default role
   });
 
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate(); // Initialize navigate
 
   const handleChange = (e) => {
@@ -25,18 +27,24 @@ const Register = () => {
 
     setMessage(""); // Clear previous success message
     setError(""); // Clear previous error
+    setLoading(true);
+    setMessage("Registering...");
+
 
     try {
       const response = await axios.post("http://localhost:5000/api/register", formData);
-      setMessage(response.data.message); // Display success message
+      setMessage("Registration successful!");
+
 
       // Store the email in localStorage after successful registration
       localStorage.setItem("email", formData.email); // Added this line
 
-      setFormData({ name: "", email: "", password: "", role: "user" }); // Reset form
+      setFormData({ name: "", email: "", password: "", phone: "", role: "user" }); // Reset form
 
       // Navigate to the About page after successful registration
-      navigate("/about");
+      setTimeout(() => { // <-- Delay navigation to show success message
+        navigate("/about");
+      }, 1500);
     } catch (err) {
       setError(err.response?.data?.error || "Something went wrong"); // Display error
     }
@@ -74,6 +82,18 @@ const Register = () => {
         </div>
 
         <div className={styles.inputGroup}>
+          <label htmlFor="phone">Phone Number</label>
+          <input
+            type="tel" // Use "tel" for phone input
+            id="phone"
+            name="phone"
+            value={formData.phone}
+            onChange={handleChange}
+            required
+          />
+        </div>
+
+        <div className={styles.inputGroup}>
           <label htmlFor="password">Password</label>
           <input
             type="password"
@@ -102,9 +122,9 @@ const Register = () => {
         <button
           type="submit"
           className={styles.registerButton}
-          disabled={!formData.name || !formData.email || !formData.password}
+          disabled={!formData.name || !formData.email || !formData.password || !formData.phone}
         >
-          {message ? "Registered" : "Register"}
+          {loading ? "Registering..." : "Register"}
         </button>
       </form>
     </div>

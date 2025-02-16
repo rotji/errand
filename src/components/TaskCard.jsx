@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import UserCard from '../components/UserCard';
+import BidButton from '../components/BidButton';
 import styles from './TaskCard.module.css';
 import apiClient from '../components/utils/api'; // Use centralized API client
 
@@ -39,9 +40,8 @@ const TaskCard = ({ task, onBid }) => {
         <strong>Amount:</strong> ${task.amount} <br />
         <strong>Transport Fees:</strong> ${task.transport}
       </p>
-      <button className={styles.bidTaskButton} onClick={() => onBid(task._id)}>
-        Bid Task
-      </button>
+      <BidButton onBid={() => onBid(task._id)} />
+
 
       {/* Conditionally render UserCard or loading state */}
       {loadingCreator ? (

@@ -1,11 +1,10 @@
-console.log("Starting routes/task.js");
 
 const express = require("express");
 const router = express.Router();
 const taskController = require("../controllers/taskController");
 const { connectToMongoDB } = require('../utils/mongoClient');
 
-console.log("Task Controller imported:", taskController);
+
 
 // Middleware for MongoDB connection
 router.use(async (req, res, next) => {
@@ -95,4 +94,4 @@ router.patch("/:taskId/bids/:bidId/accept", async (req, res, next) => {
 });
 
 module.exports = router;
-console.log("routes/task.js exported successfully");
+

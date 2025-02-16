@@ -17,6 +17,12 @@ const userSchema = new mongoose.Schema({
     required: true,
     minlength: 4, // Shorter password allowed for prototype
   },
+  phone: {
+    type: String,
+    required: false, // Set to false for now
+    match: /^[0-9]{10,15}$/, // Allows only numbers with a length of 10 to 15 digits
+  },
+
   userId: { 
     type: String,
     required: true,

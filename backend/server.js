@@ -24,13 +24,14 @@ app.get("/", (req, res) => {
 const agentRoutes = require("./routes/agent");
 const userRoutes = require("./routes/user");
 const taskRoutes = require("./routes/task");
-console.log("Task Routes:", taskRoutes); 
+const bidsRoutes = require("./routes/bids"); 
 const registerRoute = require("./routes/register");
 const loginRoute = require("./routes/login");
 
 // Use routes
 app.use("/api/agents", agentRoutes);
 app.use("/api/users", userRoutes);
+app.use("/api/bids", bidsRoutes);
 app.use("/api/tasks", (req, res, next) => {
     if (req.body.email) {
         req.body.userId = req.body.email; // Use email as the userId

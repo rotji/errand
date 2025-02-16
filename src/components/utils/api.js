@@ -2,8 +2,8 @@ import axios from "axios";
 
 // Create an Axios instance for centralized configuration (optional)
 const apiClient = axios.create({
-  baseURL: "/api", // Base URL for your API
-  timeout: 10000, // Request timeout
+  baseURL: "http://localhost:5000/api", // Base URL for your API
+  timeout: 60000, // Request timeout
   headers: {
     "Content-Type": "application/json", // Default headers
   },
@@ -45,6 +45,61 @@ export const createTask = async (taskData) => {
     throw error; // Rethrow the error so it can be handled in the calling component
   }
 };
+
+// Function to place a bid on a task
+export const placeBid = async (taskId) => {
+  try {
+    const agentId = localStorage.getItem("agentId");
+    const email = localStorage.getItem("email");
+    const agentName = localStorage.getItem("agentName");
+    const agentPhone = localStorage.getItem("agentPhone"); // Get phone from localStorage
+
+    // Debugging logs
+    console.log("Placing bid with:", { agentId, email, agentName, agentPhone });
+
+    if (!agentId || !email || !agentName || !agentPhone) {
+      throw new Error("Missing agent details (ID, email, name, or phone)");
+    }
+
+    const response = await apiClient.post(`/tasks/${taskId}/bid`, {
+      agentId,
+      email,
+      agentName,
+      agentPhone, 
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error("Error placing bid:", error.response ? error.response.data : error.message);
+    throw error;
+  }
+};
+
+
+
+
+// Function to fetch all bids for a given task
+export const getTaskBids = async (taskId) => {
+  try {
+    const response = await apiClient.get(`/tasks/${taskId}/bids`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching task bids:", error);
+    throw error;
+  }
+};
+
+// Function to accept a specific bid for a task
+export const acceptBid = async (taskId, bidId) => {
+  try {
+    const response = await apiClient.patch(`/tasks/${taskId}/bids/${bidId}/accept`);
+    return response.data;
+  } catch (error) {
+    console.error("Error accepting bid:", error);
+    throw error;
+  }
+};
+
 
 // Export the Axios instance if needed elsewhere
 export default apiClient;

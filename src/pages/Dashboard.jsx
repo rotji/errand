@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import TaskBids from "../components/TaskBids"; 
 import styles from "./Dashboard.module.css";
 
 const Dashboard = () => {
@@ -7,6 +8,7 @@ const Dashboard = () => {
   const [tasks, setTasks] = useState([]);
   const [bids, setBids] = useState([]);
   const [agents, setAgents] = useState([]);
+  const [selectedTaskId, setSelectedTaskId] = useState(null); // NEW: Track the task for which to view bids
 
   useEffect(() => {
     // Fetch tasks
@@ -51,6 +53,16 @@ const Dashboard = () => {
     navigate(path);
   };
 
+  // NEW: Handle when a task’s "View Bids" button is clicked
+  const handleViewBids = (taskId) => {
+    setSelectedTaskId(taskId);
+  };
+
+  // Optionally, provide a way to clear the selection
+  const handleCloseBids = () => {
+    setSelectedTaskId(null);
+  };
+
   return (
     <div className={styles.dashboard}>
       <h1 className={styles.title}>Admin Dashboard</h1>
@@ -80,7 +92,10 @@ const Dashboard = () => {
           <ul className={styles.list}>
             {tasks.slice(0, 5).map((task) => (
               <li key={task._id} className={styles.listItem}>
-                {task.title}
+                {task.title}{" "}
+                <button onClick={() => handleViewBids(task._id)} className={styles.sectionButton}>
+                  View Bids
+                </button>
               </li>
             ))}
           </ul>
@@ -139,6 +154,17 @@ const Dashboard = () => {
           </button>
         </div>
       </div>
+
+      {/* NEW: Render TaskBids for the selected task */}
+      {selectedTaskId && (
+        <div className={styles.section}>
+          <h2>Bids for Task</h2>
+          <TaskBids taskId={selectedTaskId} />
+          <button onClick={handleCloseBids} className={styles.sectionButton}>
+            Close Bids
+          </button>
+        </div>
+      )}
     </div>
   );
 };
