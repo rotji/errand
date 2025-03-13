@@ -17,7 +17,7 @@ export const fetchAllTasks = async () => {
     console.log("Fetching all tasks...");
     return response.data;
   } catch (error) {
-    console.error("Error fetching all tasks:", error);
+    console.error("Error fetching all Ctasks:", error);
     throw error;
   }
 };
