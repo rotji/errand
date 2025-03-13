@@ -1,4 +1,3 @@
-// routes/bids.js
 const express = require("express");
 const router = express.Router();
 const { connectToMongoDB } = require("../utils/mongoClient");
@@ -6,15 +5,24 @@ const { connectToMongoDB } = require("../utils/mongoClient");
 router.get("/", async (req, res) => {
   try {
     const db = await connectToMongoDB();
-    // Fetch all tasks
-    const tasks = await db.collection("tasks").find().toArray();
-    // Aggregate bids from each task
+    const tasks = await db.collection("tasks").find().toArray(); // Get all tasks
+
     let allBids = [];
-    tasks.forEach(task => {
+    
+    for (const task of tasks) {
       if (task.bids && Array.isArray(task.bids)) {
-        allBids = allBids.concat(task.bids);
+        for (const bid of task.bids) {
+          // Fetch agent details based on agentId
+          const agent = await db.collection("agents").findOne({ _id: bid.agentId });
+
+          allBids.push({
+            ...bid,
+            agentEmail: agent ? agent.email : "Unknown", // Attach agent email
+          });
+        }
       }
-    });
+    }
+
     res.status(200).json(allBids);
   } catch (error) {
     console.error("Error fetching all bids:", error);
