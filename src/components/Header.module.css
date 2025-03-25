@@ -5,24 +5,45 @@
  padding: 10px 20px;
  background-color: #333;
  color: white;
- flex-shrink: 0;
- /* Prevent shrinking */
 }
 
-.logo {
- font-size: 1.5rem;
+.logo .link {
+ color: white;
+ text-decoration: none;
+ font-size: 24px;
 }
 
 .nav {
  display: flex;
- gap: 15px;
+ align-items: center;
 }
 
 .link {
- color: #61dafb;
+ margin: 0 10px;
+ color: white;
  text-decoration: none;
 }
 
-.link:hover {
- text-decoration: underline;
+.menuButton {
+ background: none;
+ border: none;
+ color: white;
+ font-size: 24px;
+ cursor: pointer;
+ margin-left: 10px;
+}
+
+.menuDropdown {
+ position: absolute;
+ top: 50px;
+ right: 20px;
+ background: #444;
+ padding: 10px;
+ display: flex;
+ flex-direction: column;
+ border-radius: 5px;
+}
+
+.menuDropdown .link {
+ margin: 5px 0;
 }
