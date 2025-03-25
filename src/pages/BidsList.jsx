@@ -1,4 +1,3 @@
-// src/pages/BidsList.jsx
 import React, { useEffect, useState } from "react";
 import styles from "./BidsList.module.css";
 import { acceptBid } from "../components/utils/api";
@@ -50,16 +49,12 @@ const BidsList = () => {
   }, []);
 
   // Create a mapping from agent _id to full agent details.
-const agentMap = agents.reduce((map, agent) => {
-  map[agent._id.toString()] = agent;
-  return map;
-}, {});
+  const agentMap = agents.reduce((map, agent) => {
+    map[agent._id.toString()] = agent;
+    return map;
+  }, {});
 
-// Then, in rendering:
-const agentDetails = agentMap[bid.agentId]; // or use bid.email if preferred
-
-
-  // Handler for accepting a bid. (Assuming your acceptBid API requires both the task and bid IDs.)
+  // Handler for accepting a bid.
   const handleAccept = async (taskId, bidId) => {
     try {
       await acceptBid(taskId, bidId);
@@ -94,8 +89,9 @@ const agentDetails = agentMap[bid.agentId]; // or use bid.email if preferred
               <h4>Bids:</h4>
               <ul className={styles.bidList}>
                 {task.bids.map((bid) => {
-                  // Look up the full agent details using the bid's agentId.
+                  // Look up the full agent details using the bid's agentId (inside the map function).
                   const agentDetails = agentMap[bid.agentId];
+
                   return (
                     <li key={bid._id} className={styles.bidItem}>
                       <div className={styles.bidInfo}>

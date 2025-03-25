@@ -12,10 +12,12 @@ const apiClient = axios.create({
 // Function to fetch all tasks
 export const fetchAllTasks = async () => {
   try {
+    console.log("Fetching all tasks...");
     const response = await apiClient.get("/tasks");
+    console.log("Fetching all tasks...");
     return response.data;
   } catch (error) {
-    console.error("Error fetching all tasks:", error);
+    console.error("Error fetching all Ctasks:", error);
     throw error;
   }
 };
@@ -25,9 +27,11 @@ export const fetchUserTasks = async (userId) => {
   try {
     // Retrieve email from localStorage and include it in the request params
     const email = localStorage.getItem("userEmail");
+     console.log("Fetching tasks for user:", { userId, email });
     const response = await apiClient.get(`/tasks/user-tasks`, {
       params: { userId, email }, // Include email in the request parameters
     });
+    console.log("Fetched user tasks:", response.data); 
     return response.data;
   } catch (error) {
     console.error("Error fetching user tasks:", error);
@@ -67,7 +71,7 @@ export const placeBid = async (taskId) => {
       agentName,
       agentPhone, 
     });
-
+    console.log("Bid response:", response.data);
     return response.data;
   } catch (error) {
     console.error("Error placing bid:", error.response ? error.response.data : error.message);
@@ -99,6 +103,18 @@ export const acceptBid = async (taskId, bidId) => {
     throw error;
   }
 };
+
+// function to fetchuserid
+export const fetchUserById = async (userId) => {
+  try {
+    const response = await apiClient.get(`/users/${userId}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching user:", error);
+    throw error;
+  }
+};
+
 
 
 // Export the Axios instance if needed elsewhere
