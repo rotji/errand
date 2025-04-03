@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import styles from './Header.module.css';
 
 const Header = () => {
+  // ✅ Keep only this single useState declaration
   const [menuOpen, setMenuOpen] = useState(false);
 
   const toggleMenu = () => {
@@ -11,7 +12,7 @@ const Header = () => {
 
   return (
     <header className={styles.header}>
-      <div className={styles.logo}>
+      <div className={styleccds.logo}>
         <Link to="/" className={styles.link}>Errand</Link>
       </div>
       

@@ -1,3 +1,4 @@
+
 import React, { createContext, useState } from "react";
 
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
@@ -33,9 +34,11 @@ export const APIContext = createContext();
 const App = () => {
   // Retrieve email from localStorage
   const [loggedInEmail, setLoggedInEmail] = useState(localStorage.getItem("email") || "");
-
+  
   // API Base URL
-  const apiBaseURL = "http://localhost:5000/api"; 
+  const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL || "http://localhost:5000") + "/api";
+  console.log("API BASE URL:", import.meta.env.VITE_API_BASE_URL);
+
   
   return (
     <APIContext.Provider value={apiBaseURL}> {/* Provide API base URL */}
@@ -93,4 +96,4 @@ const App = () => {
   );
 };
 
-export default App;
+export default App; 

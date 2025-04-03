@@ -4,7 +4,9 @@ import styles from "./UserList.module.css";
 const UserList = () => {
   const [users, setUsers] = useState([]);
 
+
   useEffect(() => {
+    
     const fetchUsers = async () => {
       try {
         const response = await fetch("/api/users");

@@ -1,13 +1,17 @@
 import axios from "axios";
 
-// Create an Axios instance for centralized configuration (optional)
+// Use Vercel API when deployed, fallback to localhost in dev
+const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL || "http://localhost:5000") + "/api";
+
+// Create an Axios instance with dynamic baseURL
 const apiClient = axios.create({
-  baseURL: "http://localhost:5000/api", // Base URL for your API
+  baseURL: API_BASE_URL, 
   timeout: 60000, // Request timeout
   headers: {
-    "Content-Type": "application/json", // Default headers
+    "Content-Type": "application/json",
   },
 });
+
 
 // Function to fetch all tasks
 export const fetchAllTasks = async () => {
