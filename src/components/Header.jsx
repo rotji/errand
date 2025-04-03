@@ -3,6 +3,9 @@ import { Link } from 'react-router-dom';
 import styles from './Header.module.css';
 
 const Header = () => {
+  // ✅ Keep only this single useState declaration
+
+
 
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -15,12 +18,17 @@ const Header = () => {
 
   return (
     <header className={styles.header}>
+
+      <div className={styleccds.logo}>
+        <Link to="/" className={styles.link}>Errand</Link>
+
       <div className={styles.logo}>
         {/* Apply the .title class to give it a different color */}
         <Link to="/" className={styles.title}>Errand</Link>
         <Link to="/">
           <img src="/logo.png" alt="Errand Logo" className={styles.logoImg} />
         </Link>
+
       </div>
 
       
