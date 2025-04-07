@@ -3,14 +3,22 @@
  justify-content: space-between;
  align-items: center;
  padding: 10px 20px;
- background-color: P#333;
+ background-color: #333;
  color: white;
+ flex-shrink: 0;
+ position: relative;
 }
 
-.logo .link {
- color: white;
+/* Removed .logoImg and .logo .link */
+
+.title {
+ color: #FFD700;
+ font-weight: bold;
  text-decoration: none;
- font-size: 24px;
+}
+
+.title:hover {
+ text-decoration: underline;
 }
 
 .nav {
@@ -24,26 +32,59 @@
  text-decoration: none;
 }
 
-.menuButton {
- background: none;
- border: none;
- color: white;
+.link:hover {
+ text-decoration: underline;
+}
+
+.menuIcon {
+ display: block;
  font-size: 24px;
  cursor: pointer;
- margin-left: 10px;
+ color: white;
+ margin-left: 20px;
 }
 
-.menuDropdown {
+.dropdownMenu {
  position: absolute;
- top: 50px;
+ top: 100%;
  right: 20px;
- background: #444;
+ background: #222;
  padding: 10px;
- display: flex;
- flex-direction: column;
  border-radius: 5px;
+ list-style: none;
+ box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+ display: none;
 }
 
-.menuDropdown .link {
- margin: 5px 0;
+.dropdownMenu li {
+ padding: 10px;
+ border-bottom: 1px solid #444;
+}
+
+.dropdownMenu li:last-child {
+ border-bottom: none;
+}
+
+.menuLink {
+ display: block;
+ color: white;
+ text-decoration: none;
+}
+
+.menuLink:hover {
+ background: #555;
+}
+
+.show {
+ display: block;
+}
+
+@media (max-width: 768px) {
+ .nav {
+  display: none;
+ }
+
+ .menuIcon {
+  display: block;
+ }
 }
