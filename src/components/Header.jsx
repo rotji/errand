@@ -13,7 +13,9 @@ const Header = () => {
     <header className={styles.header}>
       <div className={styles.logo}>
         <Link to="/" className={styles.title}>Errand</Link>
-        {/* Logo placeholder removed for now */}
+        <Link to="/">
+          <img src="/logo.png" alt="Errand Logo" className={styles.logoImg} />
+        </Link>
       </div>
 
       <nav className={styles.nav}>
@@ -28,12 +30,14 @@ const Header = () => {
         ☰
       </div>
 
-      <ul className={`${styles.dropdownMenu} ${menuOpen ? styles.show : ''}`}>
-        <li><Link to="/" className={styles.menuLink}>Home</Link></li>
-        <li><Link to="/dashboard" className={styles.menuLink}>Dashboard</Link></li>
-        <li><Link to="/user-dashboard" className={styles.menuLink}>User Dashboard</Link></li>
-        <li><Link to="/agent-dashboard" className={styles.menuLink}>Agent Dashboard</Link></li>
-      </ul>
+      {menuOpen && (
+        <div className={styles.menuDropdown}>
+          <Link to="/" className={styles.link}>Home</Link>
+          <Link to="/dashboard" className={styles.link}>Dashboard</Link>
+          <Link to="/user-dashboard" className={styles.link}>User Dashboard</Link>
+          <Link to="/agent-dashboard" className={styles.link}>Agent Dashboard</Link>
+        </div>
+      )}
     </header>
   );
 };

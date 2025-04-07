@@ -9,16 +9,21 @@
  position: relative;
 }
 
-/* Removed .logoImg and .logo .link */
-
+/* Style for the "Errand" title */
 .title {
  color: #FFD700;
+ /* Gold color */
  font-weight: bold;
  text-decoration: none;
 }
 
 .title:hover {
  text-decoration: underline;
+}
+
+.logoImg {
+ width: 25px;
+ height: auto;
 }
 
 .nav {
@@ -79,6 +84,7 @@
  display: block;
 }
 
+/* Responsive behavior */
 @media (max-width: 768px) {
  .nav {
   display: none;
