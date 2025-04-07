@@ -3,39 +3,26 @@
  justify-content: space-between;
  align-items: center;
  padding: 10px 20px;
- background-color: P#333;
+ background-color: #333;
  color: white;
-
-
  flex-shrink: 0;
  position: relative;
- /* Needed for absolute positioning of the menu */
-
-}
-
-.logo .link {
- color: white;
- text-decoration: none;
- font-size: 24px;
 }
 
 /* Style for the "Errand" title */
 .title {
  color: #FFD700;
- /* Gold color, change as needed */
+ /* Gold color */
  font-weight: bold;
  text-decoration: none;
- /* Remove underline */
 }
 
 .title:hover {
  text-decoration: underline;
- /* Optional hover effect */
 }
 
 .logoImg {
  width: 25px;
- /* Adjust size as needed */
  height: auto;
 }
 
@@ -50,49 +37,21 @@
  text-decoration: none;
 }
 
-
-.menuButton {
- background: none;
- border: none;
- color: white;
- font-size: 24px;
- cursor: pointer;
- margin-left: 10px;
-}
-
-.menuDropdown {
- position: absolute;
- top: 50px;
- right: 20px;
- background: #444;
- padding: 10px;
- display: flex;
- flex-direction: column;
- border-radius: 5px;
-}
-
-.menuDropdown .link {
- margin: 5px 0;
-}
 .link:hover {
  text-decoration: underline;
 }
 
-/* Ensure menu icon is always visible */
 .menuIcon {
  display: block;
  font-size: 24px;
  cursor: pointer;
  color: white;
- /* Make sure it's visible */
  margin-left: 20px;
 }
 
-/* Dropdown Menu */
 .dropdownMenu {
  position: absolute;
  top: 100%;
- /* Below the header */
  right: 20px;
  background: #222;
  padding: 10px;
@@ -100,7 +59,6 @@
  list-style: none;
  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
  display: none;
- /* Initially hidden */
 }
 
 .dropdownMenu li {
@@ -122,12 +80,11 @@
  background: #555;
 }
 
-/* Show dropdown when menu is clicked */
 .show {
  display: block;
 }
 
-/* Hide nav on small screens and show menu icon */
+/* Responsive behavior */
 @media (max-width: 768px) {
  .nav {
   display: none;
@@ -136,5 +93,4 @@
  .menuIcon {
   display: block;
  }
-
 }
