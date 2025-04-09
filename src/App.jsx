@@ -41,7 +41,7 @@ const App = () => {
 
   
   return (
-    <APIContext.Provider value={apiBaseURL}> {/* Provide API base URL */}
+    <APIContext.Provider value={API_BASE_URL}>
       <ErrorBoundary> {/* Wrap the entire app in the ErrorBoundary */}
         <Router>
           <div style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}>
