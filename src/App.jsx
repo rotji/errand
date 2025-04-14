@@ -36,10 +36,9 @@ const App = () => {
   const [loggedInEmail, setLoggedInEmail] = useState(localStorage.getItem("email") || "");
   
   // API Base URL
-  const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL || "http://localhost:5000") + "/api";
-  console.log("API BASE URL:", import.meta.env.VITE_API_BASE_URL);
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL 
 
-  
+
   return (
     <APIContext.Provider value={API_BASE_URL}>
       <ErrorBoundary> {/* Wrap the entire app in the ErrorBoundary */}
