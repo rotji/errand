@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import styles from "./UserList.module.css";
 
+// ✅ Load API base URL from .env
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000";
+
 const UserList = () => {
   const [users, setUsers] = useState([]);
 
@@ -9,7 +12,8 @@ const UserList = () => {
     
     const fetchUsers = async () => {
       try {
-        const response = await fetch("/api/users");
+        // ✅ Use dynamic backend URL
+        const response = await fetch(`${API_BASE_URL}/api/users`);
         if (!response.ok) {
           throw new Error("Failed to fetch users");
         }

@@ -3,6 +3,9 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import styles from './Login.module.css'; // Import the module.css file
 
+// ✅ Load API base URL from .env
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
+
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -12,8 +15,8 @@ const Login = () => {
 
   const handleLogin = async () => {
     try {
-      // Send login request to backend
-      const response = await axios.post("http://localhost:5000/api/login", { email, password });
+      // ✅ Use .env for backend login request
+      const response = await axios.post(`${API_BASE_URL}/api/login`, { email, password });
       console.log("Login successful:", response.data);
 
       // Store the email in localStorage on successful login

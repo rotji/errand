@@ -6,6 +6,9 @@ import { APIContext } from "../App";
 import RequestTask from "../pages/RequestTask";
 import { placeBid } from "../components/utils/api";
 
+// ✅ Load API base URL from .env
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000";
+
 const TasksList = () => {
   const [tasks, setTasks] = useState([]);
   const [error, setError] = useState(null);
@@ -14,8 +17,8 @@ const TasksList = () => {
   useEffect(() => {
     const fetchTasks = async () => {
       try {
-        // ✅ New API endpoint to fetch all tasks
-        const response = await fetch(`${apiBaseURL}/tasks/all-tasks`, {
+        // ✅ Dynamic backend URL
+        const response = await fetch(`${API_BASE_URL}/tasks/all-tasks`, {
           headers: { "Content-Type": "application/json" },
         });
 

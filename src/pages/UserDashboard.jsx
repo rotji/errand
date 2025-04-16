@@ -4,13 +4,17 @@ import TaskHistory from '../components/UserDashboard/TaskHistory';
 import TransactionHistory from '../components/UserDashboard/TransactionHistory';
 import styles from './userdashboard.module.css';
 
+// ✅ Load API base URL from .env
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
+
 const UserDashboard = () => {
   const [userTasks, setUserTasks] = useState([]);
 
   useEffect(() => {
     const fetchUserTasks = async () => {
       try {
-        const response = await fetch('/api/user-tasks'); // Adjust the endpoint as needed
+        // ✅ Use dynamic backend URL
+        const response = await fetch(`${API_BASE_URL}/api/user-tasks`);
         if (!response.ok) {
           throw new Error('Failed to fetch user tasks');
         }
