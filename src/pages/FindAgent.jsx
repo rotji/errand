@@ -4,6 +4,9 @@ import Map from "../components/Map";
 import AgentCard from "../components/AgentCard";
 import axios from 'axios';
 
+// ✅ ADDED: Load API base URL from .env
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
+
 const FindAgent = () => {
   const [agents, setAgents] = useState([]);
   const [userLocation, setUserLocation] = useState(null);
@@ -22,9 +25,9 @@ const FindAgent = () => {
 
   useEffect(() => {
     if (userLocation) {
-      // Fetch agents from the backend
+      // ✅ REPLACED: Hardcoded URL with .env-based dynamic URL
       axios
-        .get(`/api/agents/find?lat=${userLocation.latitude}&lng=${userLocation.longitude}`)
+        .get(`${API_BASE_URL}/api/agents/find?lat=${userLocation.latitude}&lng=${userLocation.longitude}`)
         .then((response) => setAgents(response.data))
         .catch((error) => console.error("Error fetching agents:", error));
     }
