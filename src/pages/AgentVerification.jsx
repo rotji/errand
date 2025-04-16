@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import styles from './AgentVerification.module.css';
 
+// ✅ ADDED: Load API base URL from .env
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
+
 const AgentVerification = () => {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [agentInfo, setAgentInfo] = useState(null);
@@ -11,8 +14,9 @@ const AgentVerification = () => {
       setError('');
       setAgentInfo(null);
 
-      // API call to verify agent
-      const response = await fetch(`/api/agents/verify?phone=${phoneNumber}`);
+      // ✅ REPLACED: Hardcoded fetch URL with .env-based dynamic URL
+      const response = await fetch(`${API_BASE_URL}/api/agents/verify?phone=${phoneNumber}`);
+
       if (!response.ok) throw new Error('Agent not found');
       const data = await response.json();
       setAgentInfo(data);

@@ -1,7 +1,8 @@
 import axios from "axios";
 
-// Use Vercel API when deployed, fallback to localhost in dev
-const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL || "http://localhost:5000") + "/api";
+// Only use the .env variable – no fallback, no hardcoded suffix
+export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 
 // Create an Axios instance with dynamic baseURL
 const apiClient = axios.create({

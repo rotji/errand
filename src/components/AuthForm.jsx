@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import axios from "axios";
 import styles from "./AuthForm.module.css"; // Assuming module CSS for styling
 
+// ✅ ADDED: Load backend URL from environment variable
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000";
+
 const AuthForm = () => {
   const [isRegistering, setIsRegistering] = useState(true); // Toggle between register and login
   const [formData, setFormData] = useState({
@@ -35,9 +38,10 @@ const AuthForm = () => {
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
+    // ✅ ADDED: Build the URL using the environment variable
     const url = isRegistering
-      ? "http://localhost:5000/api/users/register"
-      : "http://localhost:5000/api/users/login"; // Adjust URL based on mode
+      ? `${API_BASE_URL}/api/users/register`
+      : `${API_BASE_URL}/api/users/login`;
 
     try {
       const response = await axios.post(url, formData);

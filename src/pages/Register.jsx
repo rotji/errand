@@ -3,6 +3,9 @@ import styles from "./Register.module.css";
 import axios from "axios";
 import { useNavigate } from "react-router-dom"; // Import useNavigate
 
+// ✅ Load API base URL from .env
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
+
 const Register = () => {
   const [formData, setFormData] = useState({
     name: "",
@@ -32,7 +35,8 @@ const Register = () => {
 
 
     try {
-      const response = await axios.post("http://localhost:5000/api/register", formData);
+      // ✅ Use dynamic backend URL
+      const response = await axios.post(`${API_BASE_URL}/api/register`, formData);
       setMessage("Registration successful!");
 
 

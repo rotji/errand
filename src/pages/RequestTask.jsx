@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import styles from "./RequestTask.module.css";
 import axios from "axios";
 
+// ✅ Load API base URL from .env
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000";
+
 const RequestTask = () => {
   const [taskDetails, setTaskDetails] = useState({
     title: "",
@@ -28,7 +31,8 @@ const RequestTask = () => {
     setIsSubmitting(true);
 
     try {
-      const response = await axios.post("http://localhost:5000/api/tasks/create", taskDetails, {
+      // ✅ Use dynamic backend URL
+      const response = await axios.post(`${API_BASE_URL}/api/tasks/create`, taskDetails, {
         headers: { "Content-Type": "application/json" },
       });
 

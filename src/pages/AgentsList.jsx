@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import styles from './AgentsList.module.css';
 
+// ✅ ADDED: Load backend base URL from environment
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
+
 const AgentsList = () => {
   const [agents, setAgents] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -10,7 +13,9 @@ const AgentsList = () => {
     const fetchAgents = async () => {
       try {
         setLoading(true);
-        const response = await fetch('/api/agents');
+        // ✅ REPLACED: Hardcoded fetch URL with dynamic one
+        const response = await fetch(`${API_BASE_URL}/api/agents`);
+
         if (!response.ok) {
           throw new Error('Failed to fetch agents');
         }

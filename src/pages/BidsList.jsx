@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import styles from "./BidsList.module.css";
 import { acceptBid } from "../components/utils/api";
+// ✅ ADDED: Load API base URL from .env
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
 
 const BidsList = () => {
   const [tasksWithBids, setTasksWithBids] = useState([]);
@@ -12,7 +14,9 @@ const BidsList = () => {
   const fetchTasksWithBids = async () => {
     setLoading(true);
     try {
-      const response = await fetch("http://localhost:5000/api/tasks/all-tasks");
+      // ✅ ADDED: Load API base URL from .env
+      const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
+
       if (!response.ok) {
         throw new Error("Failed to fetch tasks");
       }
@@ -32,7 +36,9 @@ const BidsList = () => {
   // Fetch all agents from the backend
   const fetchAgents = async () => {
     try {
-      const response = await fetch("http://localhost:5000/api/agents");
+      // ✅ ADDED: Load API base URL from .env
+      const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
+      
       if (!response.ok) {
         throw new Error("Failed to fetch agents");
       }

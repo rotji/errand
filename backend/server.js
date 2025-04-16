@@ -17,7 +17,7 @@ app.use(express.json()); // Middleware to parse JSON bodies
 
 // Simple Home Route (for testing)
 app.get("/", (req, res) => {
-  res.json({ message: "Welcome to the Errand Platform Backend!" });
+  res.json({ message: process.env.SERVER_MESSAGE || "Welcome to the Errand Platform Backend!" });
 });
 
 // Import routes
@@ -91,7 +91,8 @@ app.use((err, req, res, next) => {
 });
 
 // Start the server
+console.log(`Environment: ${process.env.NODE_ENV}`);
 app.listen(port, () => {
-  console.log(`Server is running on http://localhost:${port}`);
+  console.log(`Server is running on ${process.env.SERVER_URL || `http://localhost:${port}`}`);
 });
 
