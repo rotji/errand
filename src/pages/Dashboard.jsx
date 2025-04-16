@@ -3,6 +3,9 @@ import { useNavigate } from "react-router-dom";
 import TaskBids from "../components/TaskBids"; 
 import styles from "./Dashboard.module.css";
 
+// ✅ ADDED: Load API base URL from .env
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
+
 const Dashboard = () => {
   const navigate = useNavigate();
   const [tasks, setTasks] = useState([]);
@@ -14,7 +17,8 @@ const Dashboard = () => {
     // Fetch tasks
     const fetchTasks = async () => {
       try {
-        const response = await fetch("/api/tasks");
+        // ✅ REPLACED: Hardcoded URL with .env-based dynamic URL
+        const response = await fetch(`${API_BASE_URL}/api/tasks`);
         const data = await response.json();
         setTasks(data);
       } catch (error) {
@@ -25,7 +29,8 @@ const Dashboard = () => {
     // Fetch bids
     const fetchBids = async () => {
       try {
-        const response = await fetch("/api/bids");
+        // ✅ REPLACED: Hardcoded URL with .env-based dynamic URL
+        const response = await fetch(`${API_BASE_URL}/api/bids`);
         const data = await response.json();
         setBids(data);
       } catch (error) {
@@ -36,7 +41,8 @@ const Dashboard = () => {
     // Fetch agents
     const fetchAgents = async () => {
       try {
-        const response = await fetch("/api/agents");
+        // ✅ REPLACED: Hardcoded URL with .env-based dynamic URL
+        const response = await fetch(`${API_BASE_URL}/api/agents`);
         const data = await response.json();
         setAgents(data);
       } catch (error) {
