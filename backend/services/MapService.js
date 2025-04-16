@@ -3,6 +3,11 @@ const axios = require("axios");
 // Example: Google Maps API Key
 const GOOGLE_MAPS_API_KEY = process.env.GOOGLE_MAPS_API_KEY;
 
+if (!GOOGLE_MAPS_API_KEY) {
+  throw new Error("Missing GOOGLE_MAPS_API_KEY in environment variables.");
+}
+
+
 /**
  * Perform geocoding to get latitude and longitude from an address.
  * @param {string} address - The address to geocode.
