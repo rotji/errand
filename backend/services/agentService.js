@@ -1,6 +1,8 @@
 import axios from "axios";
 
-const API_URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:5000/api/agents";
+// Use Vite-style .env variable for the base URL (frontend project)
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000";
+const API_URL = `${API_BASE_URL}/api/agents`;
 
 // Fetch agent details by ID
 export const getAgentDetails = async (agentId) => {
