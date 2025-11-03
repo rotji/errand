@@ -1,23 +1,20 @@
-const { connectToMongoDB } = require("../utils/mongoClient"); // MongoDB client utility
-const { ObjectId } = require("mongodb"); // Import ObjectId for MongoDB queries
+const Task = require("../models/Task"); // Mongoose Task model
 
 const TaskService = {
   // Create a new task
   async createTask(taskData) {
     try {
-      console.log("// Input taskData:", taskData); // Log input arguments
+      console.log("// Input taskData:", taskData);
       
       if (!taskData.title || !taskData.userId) {
         throw new Error("Task must include a title and userId");
       }
 
-      const db = await connectToMongoDB();
-      console.log("// Connected to MongoDB for createTask"); // Log successful connection
+      const task = new Task(taskData);
+      const savedTask = await task.save();
+      console.log("// Mongoose save result:", savedTask);
       
-      const result = await db.collection("tasks").insertOne(taskData);
-      console.log("// MongoDB insertOne result:", result); // Log MongoDB query result
-      
-      return { success: true, task: { ...taskData, _id: result.insertedId } };
+      return { success: true, task: savedTask };
     } catch (error) {
       console.error("Error creating task:", error.message || error);
       throw new Error("Failed to create task");
@@ -27,11 +24,8 @@ const TaskService = {
   // Get all tasks
   async getAllTasks() {
     try {
-      const db = await connectToMongoDB();
-      console.log("// Connected to MongoDB for getAllTasks"); // Log successful connection
-
-      const tasks = await db.collection("tasks").find().toArray();
-      console.log("// MongoDB find result for all tasks:", tasks); // Log query result
+      const tasks = await Task.find().sort({ createdAt: -1 });
+      console.log("// Mongoose find result for all tasks:", tasks.length, "tasks found");
 
       return { success: true, tasks };
     } catch (error) {
@@ -43,17 +37,14 @@ const TaskService = {
   // Get tasks by user email (userId refers to user email)
   async getTasksByUserId(userId) {
     try {
-      console.log("// Input userId:", userId); // Log input argument
+      console.log("// Input userId:", userId);
       
       if (!userId) {
         throw new Error("User email is required to fetch tasks");
       }
 
-      const db = await connectToMongoDB();
-      console.log("// Connected to MongoDB for getTasksByUserId"); // Log successful connection
-      
-      const tasks = await db.collection("tasks").find({ userId }).toArray();
-      console.log("// MongoDB find result for userId:", tasks); // Log query result
+      const tasks = await Task.find({ userId }).sort({ createdAt: -1 });
+      console.log("// Mongoose find result for userId:", tasks.length, "tasks found");
 
       return tasks;
     } catch (error) {
@@ -65,17 +56,10 @@ const TaskService = {
   // Get a task by ID
   async getTaskById(taskId) {
     try {
-      console.log("// Input taskId:", taskId); // Log input argument
+      console.log("// Input taskId:", taskId);
       
-      if (!ObjectId.isValid(taskId)) {
-        throw new Error("Invalid task ID format");
-      }
-
-      const db = await connectToMongoDB();
-      console.log("// Connected to MongoDB for getTaskById"); // Log successful connection
-      
-      const task = await db.collection("tasks").findOne({ _id: new ObjectId(taskId) });
-      console.log("// MongoDB findOne result for taskId:", task); // Log query result
+      const task = await Task.findById(taskId);
+      console.log("// Mongoose findById result:", task ? "Task found" : "Task not found");
 
       if (!task) {
         throw new Error("Task not found");
@@ -90,32 +74,20 @@ const TaskService = {
   // Add a bid to a task
   async addBid(taskId, bid) {
     try {
-      console.log("// Input taskId:", taskId, "// Input bid:", bid); // Log input arguments
+      console.log("// Input taskId:", taskId, "// Input bid:", bid);
       
-      if (!ObjectId.isValid(taskId)) {
-        throw new Error("Invalid task ID format");
-      }
-
-      const db = await connectToMongoDB();
-      console.log("// Connected to MongoDB for addBid"); // Log successful connection
-
-      const task = await db.collection("tasks").findOne({ _id: new ObjectId(taskId) });
-      console.log("// MongoDB findOne result for taskId (before update):", task); // Log query result
+      const task = await Task.findById(taskId);
+      console.log("// Task found for bid:", task ? "Yes" : "No");
       
       if (!task) {
         throw new Error("Task not found");
       }
 
-      const updatedBids = task.bids || [];
-      updatedBids.push(bid);
+      task.bids.push(bid);
+      const updatedTask = await task.save();
+      console.log("// Mongoose save result for addBid:", updatedTask.bids.length, "total bids");
 
-      const updateResult = await db.collection("tasks").updateOne(
-        { _id: new ObjectId(taskId) },
-        { $set: { bids: updatedBids } }
-      );
-      console.log("// MongoDB updateOne result for addBid:", updateResult); // Log update result
-
-      return { success: true, bids: updatedBids };
+      return { success: true, bids: updatedTask.bids };
     } catch (error) {
       console.error("Error adding bid:", error.message || error);
       throw new Error("Failed to add bid to task");
@@ -125,29 +97,20 @@ const TaskService = {
   // Update task status
   async updateTaskStatus(taskId, status) {
     try {
-      console.log("// Input taskId:", taskId, "// Input status:", status); // Log input arguments
+      console.log("// Input taskId:", taskId, "// Input status:", status);
       
-      if (!ObjectId.isValid(taskId)) {
-        throw new Error("Invalid task ID format");
-      }
-
-      const db = await connectToMongoDB();
-      console.log("// Connected to MongoDB for updateTaskStatus"); // Log successful connection
-
-      const task = await db.collection("tasks").findOne({ _id: new ObjectId(taskId) });
-      console.log("// MongoDB findOne result for taskId (before update):", task); // Log query result
+      const task = await Task.findByIdAndUpdate(
+        taskId, 
+        { status }, 
+        { new: true, runValidators: true }
+      );
+      console.log("// Mongoose findByIdAndUpdate result:", task ? "Updated successfully" : "Task not found");
       
       if (!task) {
         throw new Error("Task not found");
       }
 
-      const updateResult = await db.collection("tasks").updateOne(
-        { _id: new ObjectId(taskId) },
-        { $set: { status } }
-      );
-      console.log("// MongoDB updateOne result for updateTaskStatus:", updateResult); // Log update result
-
-      return { success: true, task: { ...task, status } };
+      return { success: true, task };
     } catch (error) {
       console.error("Error updating task status:", error.message || error);
       throw new Error("Failed to update task status");

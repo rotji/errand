@@ -1,5 +1,4 @@
-const { connectToMongoDB } = require('../utils/mongoClient');
-const { ObjectId } = require("mongodb");
+const Task = require('../models/Task');
 const TaskService = require("../services/TaskService");
 
 const createTask = async (req, res) => {
@@ -11,7 +10,7 @@ const createTask = async (req, res) => {
       return res.status(400).json({ error: "All fields are required" });
     }
 
-    const newTask = {
+    const newTaskData = {
       title,
       description,
       from,
@@ -25,14 +24,13 @@ const createTask = async (req, res) => {
       createdBy: req.user ? req.user._id : null,
     };
 
-    const db = await connectToMongoDB();
-    const result = await db.collection("tasks").insertOne(newTask);
+    const task = new Task(newTaskData);
+    const savedTask = await task.save();
 
-    if (!result.insertedId) {
-      return res.status(500).json({ error: "Failed to save the task" });
-    }
-
-    res.status(201).json({ message: "Task created successfully", task: { ...newTask, _id: result.insertedId } });
+    res.status(201).json({ 
+      message: "Task created successfully", 
+      task: savedTask 
+    });
   } catch (error) {
     console.error("Error creating task:", error);
     res.status(500).json({ error: "An error occurred while creating the task" });
@@ -42,8 +40,7 @@ const createTask = async (req, res) => {
 const getUserTasks = async (req, res) => {
   try {
     const userId = req.params.userId;
-    const db = await connectToMongoDB();
-    const tasks = await db.collection("tasks").find({ userId }).toArray();
+    const tasks = await Task.find({ userId }).sort({ createdAt: -1 });
 
     if (!tasks || tasks.length === 0) {
       return res.status(404).json({ message: "No tasks found for this user." });
@@ -57,8 +54,7 @@ const getUserTasks = async (req, res) => {
 
 const getAllTasks = async (req, res) => {
   try {
-    const db = await connectToMongoDB();
-    const tasks = await db.collection("tasks").find().toArray();
+    const tasks = await Task.find().sort({ createdAt: -1 });
 
     if (!tasks || tasks.length === 0) {
       return res.status(404).json({ message: "No tasks found." });
@@ -77,21 +73,14 @@ const submitTask = async (req, res) => {
       return res.status(400).json({ error: "Task ID and User ID are required" });
     }
 
-    const db = await connectToMongoDB();
-    const task = await db.collection("tasks").findOne({ _id: taskId });
+    const task = await Task.findById(taskId);
 
     if (!task) {
       return res.status(404).json({ error: "Task not found" });
     }
 
-    const result = await db.collection("tasks").updateOne(
-      { _id: taskId },
-      { $set: { status: "submitted" } }
-    );
-
-    if (result.modifiedCount === 0) {
-      return res.status(500).json({ error: "Failed to update the task" });
-    }
+    task.status = "submitted";
+    await task.save();
 
     res.status(200).json({ message: "Task submitted successfully!" });
   } catch (error) {
@@ -148,7 +137,7 @@ const acceptBid = async (req, res) => {
       return res.status(400).json({ error: "Task ID and Bid ID are required." });
     }
 
-    const task = await TaskService.getTaskById(taskId);
+    const task = await Task.findById(taskId);
     if (!task) {
       return res.status(404).json({ error: "Task not found." });
     }
@@ -167,15 +156,9 @@ const acceptBid = async (req, res) => {
       return res.status(404).json({ error: "Bid not found." });
     }
 
-    const db = await connectToMongoDB();
-    const updateResult = await db.collection("tasks").updateOne(
-      { _id: new ObjectId(taskId) },
-      { $set: { bids: updatedBids, status: "assigned" } }
-    );
-
-    if (updateResult.modifiedCount === 0) {
-      return res.status(500).json({ error: "Failed to accept bid." });
-    }
+    task.bids = updatedBids;
+    task.status = "assigned";
+    await task.save();
 
     return res.status(200).json({ message: "Bid accepted successfully.", bids: updatedBids });
   } catch (error) {

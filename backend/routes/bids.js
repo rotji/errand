@@ -1,22 +1,23 @@
 const express = require("express");
 const router = express.Router();
-const { connectToMongoDB } = require("../utils/mongoClient");
+const Task = require("../models/Task");
+const Agent = require("../models/Agent");
 
 router.get("/", async (req, res) => {
   try {
-    const db = await connectToMongoDB();
-    const tasks = await db.collection("tasks").find().toArray(); // Get all tasks
+    const tasks = await Task.find({ bids: { $exists: true, $ne: [] } }); // Get tasks with bids
 
     let allBids = [];
 
     for (const task of tasks) {
       if (task.bids && Array.isArray(task.bids)) {
         for (const bid of task.bids) {
-          let agent = await db.collection("agents").findOne({ email: bid.agentId }); // Query by email
+          let agent = await Agent.findOne({ email: bid.agentId }); // Query by email
 
           allBids.push({
-            ...bid,
+            ...bid.toObject(),
             agentEmail: agent ? agent.email : "Unknown", // Attach actual agent email
+            taskTitle: task.title, // Add task context
           });
         }
       }

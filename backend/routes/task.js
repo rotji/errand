@@ -2,20 +2,6 @@
 const express = require("express");
 const router = express.Router();
 const taskController = require("../controllers/taskController");
-const { connectToMongoDB } = require('../utils/mongoClient');
-
-
-
-// Middleware for MongoDB connection
-router.use(async (req, res, next) => {
-  try {
-    req.db = await connectToMongoDB(); // Attach DB instance to request
-    next();
-  } catch (error) {
-    console.error("Database connection error:", error);
-    res.status(500).json({ error: "Failed to connect to the database" });
-  }
-});
 
 // Middleware for associating tasks with email
 router.use((req, res, next) => {
