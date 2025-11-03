@@ -11,8 +11,18 @@ const analyticsRoutes = require("./routes/analyticsRoutes");
 const app = express();
 const port = process.env.PORT || 5000;
 
-// Middleware
-app.use(cors());
+// Middleware - Configure CORS for Netlify frontend
+const corsOptions = {
+  origin: [
+    'http://localhost:3000', // Local development
+    'http://localhost:5173', // Vite dev server
+    process.env.FRONTEND_URL, // Netlify production URL (to be set in environment variables)
+  ].filter(Boolean), // Remove any undefined values
+  credentials: true,
+  optionsSuccessStatus: 200
+};
+
+app.use(cors(corsOptions));
 app.use(express.json()); // Middleware to parse JSON bodies
 
 // Simple Home Route (for testing)
