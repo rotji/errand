@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: errand-backend
+    env: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+    # Environment variables to be set in Render dashboard:
+    # - MONGODB_URL (your MongoDB Atlas connection string)
+    # - SERVER_MESSAGE (optional welcome message)
+    # - Any other custom environment variables
