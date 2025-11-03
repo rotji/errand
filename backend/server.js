@@ -5,7 +5,6 @@ require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
-const { connectToMongoDB } = require("./utils/mongoClient"); 
 const analyticsRoutes = require("./routes/analyticsRoutes");
 
 const app = express();
@@ -62,26 +61,14 @@ if (!mongoURL) {
   process.exit(1); // Exit process if URI is not defined
 }
 
-// Connect to MongoDB using Mongoose
+// MongoDB connection using Mongoose
 mongoose
-  .connect(mongoURL, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => console.log(`MongoDB Connected: ${mongoURL}`)) // Log the MongoDB URL for debugging
+  .connect(mongoURL)
+  .then(() => console.log(`MongoDB Connected: ${mongoURL}`))
   .catch((err) => {
     console.error("MongoDB connection error:", err);
-    process.exit(1); // Exit process on connection failure
+    process.exit(1);
   });
-
-// Connect to MongoDB using Native Driver (for Task functionality)
-(async () => {
-  try {
-    const db = await connectToMongoDB();
-    app.locals.db = db; // Attach the DB instance to app.locals for use in taskController
-    console.log("Connected to MongoDB using Native Driver (Tasks)");
-  } catch (error) {
-    console.error("Error connecting to MongoDB (Native Driver):", error);
-    process.exit(1); // Exit the process if the connection fails
-  }
-})();
 
 // Middleware to map email as `userId` in task-related routes
 app.use("/api/tasks", (req, res, next) => {

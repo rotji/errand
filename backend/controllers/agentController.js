@@ -1,5 +1,5 @@
 const Agent = require("../models/Agent");
-const { connectToMongoDB, mongoClient } = require("../utils/mongoClient");
+const Task = require("../models/Task");
 const { ObjectId } = require("mongodb");
 
 // Create Agent
@@ -120,11 +120,7 @@ exports.bidOnTask = async (req, res) => {
   }
 
   try {
-    const db = await connectToMongoDB();
-    // Find the task using mongoClient
-    const task = await db
-      .collection("tasks")
-      .findOne({ _id: new ObjectId(taskId) });
+    const task = await Task.findById(taskId);
     if (!task) {
       return res.status(404).json({ error: "Task not found." });
     }
@@ -137,30 +133,18 @@ exports.bidOnTask = async (req, res) => {
 
     // Create a bid object with agentId, email, date, and status
     const bid = {
-      _id: new ObjectId(),
       agentId,  // This should be the agent's unique _id as a string
       email,    // Store the real email from the frontend
-      date: new Date(),
+      bidTime: new Date(),
       status: "pending"
     };
 
-    // Append the new bid to the bids array and update the task document
-    const updatedBids = [...(task.bids || []), bid];
-    const updateResult = await db
-      .collection("tasks")
-      .updateOne(
-        { _id: new ObjectId(taskId) },
-        { $set: { bids: updatedBids } }
-      );
-    if (updateResult.modifiedCount === 0) {
-      return res.status(500).json({ error: "Failed to place bid." });
-    }
+    // Append the new bid to the bids array and save the task
+    task.bids.push(bid);
+    await task.save();
 
-    // Retrieve and return the updated task
-    const updatedTask = await db
-      .collection("tasks")
-      .findOne({ _id: new ObjectId(taskId) });
-    res.status(200).json({ message: "Bid placed successfully.", task: updatedTask });
+    // Return the updated task
+    res.status(200).json({ message: "Bid placed successfully.", task });
   } catch (error) {
     console.error("Error placing bid:", error);
     res.status(500).json({ error: "Failed to place bid." });
