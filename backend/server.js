@@ -61,12 +61,43 @@ if (!mongoURL) {
   process.exit(1); // Exit process if URI is not defined
 }
 
-// MongoDB connection using Mongoose
+// MongoDB connection using Mongoose with better error handling
+const connectOptions = {
+  serverSelectionTimeoutMS: 10000, // Timeout after 10s instead of 30s
+  socketTimeoutMS: 45000, // Close sockets after 45s of inactivity
+  maxPoolSize: 10, // Maintain up to 10 socket connections
+  heartbeatFrequencyMS: 10000, // Check server every 10s
+  // Removed deprecated options: useNewUrlParser, useUnifiedTopology
+  // These are default in Mongoose 8.x
+};
+
 mongoose
   .connect(mongoURL)
-  .then(() => console.log(`MongoDB Connected: ${mongoURL}`))
+  .then(() => {
+    console.log(`MongoDB Connected Successfully!`);
+    console.log(`Database: ${mongoose.connection.db.databaseName}`);
+    
+    // Set up connection event listeners
+    mongoose.connection.on('error', (err) => {
+      console.error('MongoDB connection error:', err);
+    });
+    
+    mongoose.connection.on('disconnected', () => {
+      console.warn('MongoDB disconnected. Attempting to reconnect...');
+    });
+    
+    mongoose.connection.on('reconnected', () => {
+      console.log('MongoDB reconnected successfully');
+    });
+  })
   .catch((err) => {
     console.error("MongoDB connection error:", err);
+    console.error("Possible causes:");
+    console.error("1. Cluster is paused or unavailable");
+    console.error("2. Network connectivity issues");
+    console.error("3. Invalid connection string");
+    console.error("4. IP not whitelisted in Atlas");
+    console.error("5. Version compatibility issues");
     process.exit(1);
   });
 
