@@ -15,9 +15,12 @@ const corsOptions = {
   origin: [
     'http://localhost:3000', // Local development
     'http://localhost:5173', // Vite dev server
-    process.env.FRONTEND_URL, // Netlify production URL (to be set in environment variables)
+    process.env.FRONTEND_URL, // Netlify production URL
+    'https://elaborate-madeleine-8d0976.netlify.app', // Fallback Netlify URL
   ].filter(Boolean), // Remove any undefined values
   credentials: true,
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept', 'Origin'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   optionsSuccessStatus: 200
 };
 
