@@ -62,7 +62,7 @@ const Header = () => {
         </Link>
       </div>
 
-      {/* Desktop Navigation */}
+      {/* Main Navigation - Always Visible */}
       <nav className={styles.nav}>
         {navigationLinks.map((link) => (
           <Link key={link.to} to={link.to} className={styles.link}>
@@ -71,11 +71,20 @@ const Header = () => {
         ))}
       </nav>
 
-      {/* Mobile Menu Button */}
+      {/* Mobile Navigation - Always Visible on Mobile */}
+      <nav className={styles.mobileNav}>
+        {navigationLinks.map((link) => (
+          <Link key={link.to} to={link.to} className={styles.mobileNavLink}>
+            {link.label}
+          </Link>
+        ))}
+      </nav>
+
+      {/* Menu Button - Only for Dashboard Links */}
       <button 
         className={styles.menuIcon} 
         onClick={toggleMenu}
-        aria-label="Toggle navigation menu"
+        aria-label="Toggle dashboard menu"
         aria-expanded={menuOpen}
       >
         <span className={`${styles.hamburger} ${menuOpen ? styles.open : ''}`}>
@@ -85,12 +94,12 @@ const Header = () => {
         </span>
       </button>
 
-      {/* Mobile Menu Overlay */}
+      {/* Mobile Menu Overlay - Only for Dashboards */}
       {menuOpen && isMobile && (
         <div className={styles.mobileOverlay} onClick={closeMenu}>
           <div className={styles.mobileMenu} onClick={(e) => e.stopPropagation()}>
             <div className={styles.mobileMenuHeader}>
-              <h3>Navigation</h3>
+              <h3>Dashboards</h3>
               <button className={styles.closeButton} onClick={closeMenu} aria-label="Close menu">
                 ×
               </button>
@@ -98,21 +107,6 @@ const Header = () => {
             
             <div className={styles.mobileMenuContent}>
               <div className={styles.menuSection}>
-                <h4>Main Pages</h4>
-                {navigationLinks.map((link) => (
-                  <Link 
-                    key={link.to} 
-                    to={link.to} 
-                    className={styles.mobileLink}
-                    onClick={closeMenu}
-                  >
-                    {link.label}
-                  </Link>
-                ))}
-              </div>
-
-              <div className={styles.menuSection}>
-                <h4>Dashboards</h4>
                 {dashboardLinks.map((link) => (
                   <Link 
                     key={link.to} 
