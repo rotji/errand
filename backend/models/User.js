@@ -67,7 +67,6 @@ const userSchema = new mongoose.Schema({
   // Created tasks by the user
   createdTasks: [
     {
-      title: { type: String, required: true },
       description: { type: String, required: true },
       from: { type: String, required: true },
       to: { type: String, required: true },

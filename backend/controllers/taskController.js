@@ -3,15 +3,34 @@ const TaskService = require("../services/TaskService");
 
 const createTask = async (req, res) => {
   try {
-    const { title, description, from, to, phone, amount, transport } = req.body;
-    const userId = req.body.userId || req.headers["user-email"];
+    console.log("Task creation request body:", req.body);
+    console.log("Task creation headers:", req.headers);
+    
+    const { description, from, to, phone, amount, transport, email } = req.body;
+    const userId = req.body.userId || req.body.email || req.headers["user-email"];
 
-    if (!title || !description || !from || !to || !phone || !amount || !transport || !userId) {
-      return res.status(400).json({ error: "All fields are required" });
+    console.log("Extracted userId:", userId);
+
+    // All fields are required
+    if (!description || !from || !to || !phone || !amount || !transport || !userId) {
+      const missingFields = [];
+      if (!description) missingFields.push('description');
+      if (!from) missingFields.push('from');
+      if (!to) missingFields.push('to');
+      if (!phone) missingFields.push('phone');
+      if (!amount) missingFields.push('amount');
+      if (!transport) missingFields.push('transport');
+      if (!userId) missingFields.push('userId/email');
+      
+      console.log("Missing fields:", missingFields);
+      return res.status(400).json({ 
+        error: "Missing required fields", 
+        missingFields,
+        received: { description: !!description, from: !!from, to: !!to, phone: !!phone, amount: !!amount, transport: !!transport, userId: !!userId }
+      });
     }
 
     const newTaskData = {
-      title,
       description,
       from,
       to,
