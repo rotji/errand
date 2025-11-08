@@ -111,9 +111,9 @@
   transform: scale(1.05);
 }
 
-/* ===== MOBILE MENU BUTTON ===== */
+/* ===== MENU BUTTON (ALL SCREENS) ===== */
 .menuIcon {
-  display: none;
+  display: block;
   background: none;
   border: none;
   cursor: pointer;
