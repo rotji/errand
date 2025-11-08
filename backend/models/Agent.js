@@ -2,10 +2,26 @@ const mongoose = require("mongoose");
 
 const agentSchema = new mongoose.Schema(
   {
-    name: { type: String, required: true },
-    email: { type: String, required: true, unique: true },
-    password: { type: String, required: true },
-    phone: { type: String, required: true, unique: true }, 
+    name: { type: String, required: true, trim: true },
+    email: { 
+      type: String, 
+      required: true, 
+      unique: true,
+      lowercase: true,
+      trim: true,
+      match: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
+    },
+    password: { type: String, required: true, minlength: 4 },
+    phone: { 
+      type: String, 
+      required: false, // Make optional to avoid registration issues
+      validate: {
+        validator: function(v) {
+          return !v || /^[0-9]{10,15}$/.test(v);
+        },
+        message: 'Phone number must be 10-15 digits'
+      }
+    }, 
     verified: { type: Boolean, default: false }, // Defaults to false for unverified agents
     location: {
       lat: { type: Number, required: false }, // Optional for registration/login
