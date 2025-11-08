@@ -10,6 +10,8 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
     unique: true,
+    lowercase: true,
+    trim: true,
     match: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, // Basic email validation
   },
   password: {
@@ -19,8 +21,14 @@ const userSchema = new mongoose.Schema({
   },
   phone: {
     type: String,
-    required: false, // Set to false for now
-    match: /^[0-9]{10,15}$/, // Allows only numbers with a length of 10 to 15 digits
+    required: false, // Optional field
+    validate: {
+      validator: function(v) {
+        // Allow empty strings or valid phone numbers
+        return !v || /^[0-9]{10,15}$/.test(v);
+      },
+      message: 'Phone number must be 10-15 digits'
+    }
   },
 
   userId: { 
