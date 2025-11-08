@@ -4,7 +4,6 @@ import { createTask } from './utils/api';
 
 const TaskForm = ({ onSubmit }) => {
   const [taskData, setTaskData] = useState({
-    title: '',
     description: '',
     from: '',
     to: '',
@@ -43,14 +42,13 @@ const TaskForm = ({ onSubmit }) => {
 
       // Reset the form
       setTaskData({
-        title: '',
         description: '',
         from: '',
         to: '',
         phone: '',
         amount: '',
         transport: '',
-        email: '', // Reset email
+        email: storedEmail || '' // Keep the stored email
       });
     } catch (error) {
       console.error('Error creating task:', error);
@@ -60,17 +58,6 @@ const TaskForm = ({ onSubmit }) => {
 
   return (
     <form className={styles.container} onSubmit={handleSubmit}>
-      <label className={styles.label}>
-        Title:
-        <input
-          type="text"
-          name="title"
-          value={taskData.title}
-          onChange={handleChange}
-          className={styles.input}
-          required
-        />
-      </label>
       <label className={styles.label}>
         Description:
         <textarea

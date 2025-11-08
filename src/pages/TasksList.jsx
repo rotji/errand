@@ -17,8 +17,8 @@ const TasksList = () => {
   useEffect(() => {
     const fetchTasks = async () => {
       try {
-        // ✅ Dynamic backend URL
-        const response = await fetch(`${API_BASE_URL}/tasks/all-tasks`, {
+        // ✅ Use correct API endpoint with /api prefix
+        const response = await fetch(`${API_BASE_URL}/api/tasks/all-tasks`, {
           headers: { "Content-Type": "application/json" },
         });
 
@@ -27,7 +27,8 @@ const TasksList = () => {
         }
 
         const data = await response.json();
-        setTasks(data.reverse()); // Display newest tasks first
+        // Tasks are already sorted by createdAt desc in backend, no need to reverse
+        setTasks(data);
       } catch (err) {
         console.error("Error fetching tasks:", err);
         setError("Failed to load tasks. Please try again later.");

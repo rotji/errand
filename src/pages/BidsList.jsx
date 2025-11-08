@@ -84,7 +84,6 @@ const BidsList = () => {
       ) : (
         tasksWithBids.map((task) => (
           <div key={task._id} className={styles.taskCard}>
-            <h3 className={styles.taskTitle}>{task.title}</h3>
             <p className={styles.taskDescription}>{task.description}</p>
             <p className={styles.taskInfo}>
               <strong>From:</strong> {task.from} | <strong>To:</strong> {task.to} |{" "}

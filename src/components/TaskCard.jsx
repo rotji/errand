@@ -31,7 +31,6 @@ const TaskCard = ({ task, onBid }) => {
 
   return (
     <div className={styles.taskCard}>
-      <h3 className={styles.taskTitle}>{task.title}</h3>
       <p className={styles.taskDescription}>{task.description}</p>
       <p className={styles.taskDetails}>
         <strong>From:</strong> {task.from} <br />
@@ -56,7 +55,6 @@ const TaskCard = ({ task, onBid }) => {
 TaskCard.propTypes = {
   task: PropTypes.shape({
     _id: PropTypes.string.isRequired,
-    title: PropTypes.string.isRequired,
     description: PropTypes.string.isRequired,
     from: PropTypes.string.isRequired,
     to: PropTypes.string.isRequired,
