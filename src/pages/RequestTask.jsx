@@ -7,7 +7,6 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000
 
 const RequestTask = () => {
   const [taskDetails, setTaskDetails] = useState({
-    title: "",
     description: "",
     from: "",
     to: "",
@@ -41,7 +40,6 @@ const RequestTask = () => {
 
       // Clear the form
       setTaskDetails({
-        title: "",
         description: "",
         from: "",
         to: "",
@@ -63,18 +61,14 @@ const RequestTask = () => {
     <div className={styles.container}>
       <h2 className={styles.heading}>Request a Task</h2>
       <form className={styles.form} onSubmit={handleSubmit}>
-        <label className={styles.label}>
-          Title:
-          <input
-            type="text"
-            name="title"
-            value={taskDetails.title}
-            onChange={handleChange}
-            className={styles.input}
-            placeholder="Title"
-            required
-          />
-        </label>
+        <textarea
+          name="description"
+          value={taskDetails.description}
+          onChange={handleChange}
+          className={`${styles.input} ${styles.textarea}`}
+          placeholder="Describe your task"
+          required
+        ></textarea>
 
         <label className={styles.label}>
           From (Address/Zip Code):
@@ -128,7 +122,6 @@ const RequestTask = () => {
           />
         </label>
 
-
         <label className={styles.label}>
           Amount:
           <input
@@ -154,15 +147,6 @@ const RequestTask = () => {
             required
           />
         </label>
-
-        <textarea
-          name="description"
-          value={taskDetails.description}
-          onChange={handleChange}
-          className={`${styles.input} ${styles.textarea}`}
-          placeholder="Description"
-          required
-        ></textarea>
 
         <button type="submit" className={styles.submitButton}>
           {isSubmitting ? "Submitting..." : "Submit Task"}

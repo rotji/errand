@@ -98,7 +98,7 @@ const Dashboard = () => {
           <ul className={styles.list}>
             {tasks.slice(0, 5).map((task) => (
               <li key={task._id} className={styles.listItem}>
-                {task.title}{" "}
+                {task.description.substring(0, 50)}{task.description.length > 50 ? '...' : ''}{" "}
                 <button onClick={() => handleViewBids(task._id)} className={styles.sectionButton}>
                   View Bids
                 </button>

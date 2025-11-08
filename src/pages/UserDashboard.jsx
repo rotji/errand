@@ -48,7 +48,7 @@ const UserDashboard = () => {
           <ul className={styles.taskList}>
             {userTasks.map((task) => (
               <li key={task._id} className={styles.taskItem}>
-                <strong>{task.title}</strong>: {task.description}
+                <strong>Task:</strong> {task.description}
               </li>
             ))}
           </ul>
